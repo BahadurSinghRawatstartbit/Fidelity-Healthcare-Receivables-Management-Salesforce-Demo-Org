@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Welcome_Email_Sent__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Prevents the welcome email automation from sending more than once per lead.</description>
+    <label>Welcome Email Sent</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <type>Checkbox</type>
+</CustomField>

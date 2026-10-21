@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>Sent automatically when an Opportunity proposal is sent.</description>
+    <encodingKey>UTF-8</encodingKey>
+    <name>Proposal Follow Up Email</name>
+    <style>none</style>
+    <subject>Following up on your proposal from Fidelity Healthcare Receivables Management</subject>
+    <type>text</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

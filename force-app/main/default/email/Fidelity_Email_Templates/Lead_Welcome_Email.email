@@ -1,0 +1,11 @@
+Hi {!Lead.FirstName},
+
+Thank you for your interest in Fidelity Healthcare Receivables Management. It was great connecting with you today.
+
+Based on our conversation, {!Lead.OwnerName} will be reaching out shortly to schedule a short discovery call so we can understand your current receivables process and show you how we can help.
+
+In the meantime, if you have any questions, feel free to reply directly to this email.
+
+Best regards,
+{!Lead.OwnerName}
+Fidelity Healthcare Receivables Management

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <alerts>
+        <fullName>Lead_Welcome_Email</fullName>
+        <description>Lead Welcome Email</description>
+        <protected>false</protected>
+        <recipients>
+            <field>Email</field>
+            <type>email</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>Fidelity_Email_Templates/Lead_Welcome_Email</template>
+    </alerts>
+    <alerts>
+        <fullName>Meeting_Confirmation_Email</fullName>
+        <description>Meeting Confirmation Email - sent to prospect and internal owner</description>
+        <protected>false</protected>
+        <recipients>
+            <field>Email</field>
+            <type>email</type>
+        </recipients>
+        <recipients>
+            <type>owner</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>Fidelity_Email_Templates/Meeting_Confirmation_Email</template>
+    </alerts>
+    <alerts>
+        <fullName>Meeting_Reminder_Email</fullName>
+        <description>Meeting Reminder Email - reused for the 24h/1h/15m scheduled paths, sent to prospect and internal owner</description>
+        <protected>false</protected>
+        <recipients>
+            <field>Email</field>
+            <type>email</type>
+        </recipients>
+        <recipients>
+            <type>owner</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>Fidelity_Email_Templates/Meeting_Reminder_Email</template>
+    </alerts>
+</Workflow>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<StandardValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sorted>false</sorted>
+    <standardValue>
+        <fullName>Outbound Calling</fullName>
+        <default>false</default>
+        <label>Outbound Calling</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Inbound Calling</fullName>
+        <default>false</default>
+        <label>Inbound Calling</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Referral</fullName>
+        <default>false</default>
+        <label>Referral</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Google Campaign</fullName>
+        <default>false</default>
+        <label>Google Campaign</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Landing Page</fullName>
+        <default>false</default>
+        <label>Landing Page</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Conference/Event</fullName>
+        <default>false</default>
+        <label>Conference/Event</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Other</fullName>
+        <default>true</default>
+        <label>Other</label>
+    </standardValue>
+</StandardValueSet>

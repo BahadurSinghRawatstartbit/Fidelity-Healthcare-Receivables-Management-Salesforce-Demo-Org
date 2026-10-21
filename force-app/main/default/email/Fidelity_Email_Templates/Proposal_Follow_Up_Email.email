@@ -1,0 +1,9 @@
+Hi {!Opportunity.Primary_Contact__r},
+
+Thank you again for the opportunity to share our proposal, "{!Opportunity.Name}".
+
+Wanted to check in and see if you had any questions so far, or if it would help to schedule a quick call to walk through the details together.
+
+Best regards,
+{!Opportunity.Owner}
+Fidelity Healthcare Receivables Management

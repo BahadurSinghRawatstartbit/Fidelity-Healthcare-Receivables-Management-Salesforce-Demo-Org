@@ -1,0 +1,9 @@
+Hi {!Lead.FirstName},
+
+This is a reminder that your discovery meeting with {!Lead.OwnerName} is scheduled for {!Lead.Meeting_Date_Time__c}.
+
+We look forward to speaking with you.
+
+Best regards,
+{!Lead.OwnerName}
+Fidelity Healthcare Receivables Management

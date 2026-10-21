@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <alerts>
+        <fullName>Proposal_Follow_Up_Email</fullName>
+        <description>Proposal Follow Up Email - sent to the primary contact and internal owner</description>
+        <protected>false</protected>
+        <recipients>
+            <field>Primary_Contact_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <recipients>
+            <type>owner</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>Fidelity_Email_Templates/Proposal_Follow_Up_Email</template>
+    </alerts>
+    <alerts>
+        <fullName>Proposal_No_Response_Email</fullName>
+        <description>Proposal No Response Email - sent to the primary contact and internal owner when there has been no response</description>
+        <protected>false</protected>
+        <recipients>
+            <field>Primary_Contact_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <recipients>
+            <type>owner</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>Fidelity_Email_Templates/Proposal_No_Response_Email</template>
+    </alerts>
+</Workflow>
