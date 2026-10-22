@@ -10,6 +10,7 @@
         <connector>
             <targetReference>Mark_Welcome_Email_Sent</targetReference>
         </connector>
+        <faultConnector><targetReference>Mark_Welcome_Email_Sent</targetReference></faultConnector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>SObjectRowId</name>

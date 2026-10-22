@@ -10,6 +10,7 @@
         <connector>
             <targetReference>Create_Escalation_Task</targetReference>
         </connector>
+        <faultConnector><targetReference>Create_Escalation_Task</targetReference></faultConnector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>SObjectRowId</name>
@@ -26,6 +27,7 @@
         <locationY>482</locationY>
         <actionName>Opportunity.Proposal_Follow_Up_Email</actionName>
         <actionType>emailAlert</actionType>
+        <faultConnector><targetReference>Email_Skipped_Send_Proposal_Email</targetReference></faultConnector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>SObjectRowId</name>
@@ -65,6 +67,17 @@
         <dataType>Date</dataType>
         <expression>TODAY() + 5</expression>
     </formulas>
+    <assignments>
+        <name>Email_Skipped_Send_Proposal_Email</name>
+        <label>Email Skipped Send Proposal Email</label>
+        <locationX>600</locationX>
+        <locationY>600</locationY>
+        <assignmentItems>
+            <assignToReference>SkipNote</assignToReference>
+            <operator>Assign</operator>
+            <value><stringValue>email skipped</stringValue></value>
+        </assignmentItems>
+    </assignments>
     <interviewLabel>Proposal Follow Up {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Proposal Follow Up</label>
     <processType>AutoLaunchedFlow</processType>
@@ -251,4 +264,11 @@
         <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>
+    <variables>
+        <name>SkipNote</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
 </Flow>

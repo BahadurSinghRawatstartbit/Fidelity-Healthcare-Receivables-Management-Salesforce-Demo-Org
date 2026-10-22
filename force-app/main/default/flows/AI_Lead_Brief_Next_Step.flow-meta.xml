@@ -48,16 +48,6 @@
         <dataType>String</dataType>
         <expression>IF(ISBLANK({!CallHistory}), "None recorded.", {!CallHistory})</expression>
     </formulas>
-    <formulas>
-        <name>BriefHtml</name>
-        <dataType>String</dataType>
-        <expression>SUBSTITUTE({!Generate_Brief.promptResponse}, BR(), &quot;&lt;br&gt;&quot;)</expression>
-    </formulas>
-    <formulas>
-        <name>NextHtml</name>
-        <dataType>String</dataType>
-        <expression>SUBSTITUTE({!Generate_Next_Step.promptResponse}, BR(), &quot;&lt;br&gt;&quot;)</expression>
-    </formulas>
     <interviewLabel>AI Lead Brief and Next Step {!$Flow.CurrentDateTime}</interviewLabel>
     <label>AI Lead Brief and Next Step</label>
     <loops>
@@ -168,13 +158,19 @@
         </fields>
         <fields>
             <name>Brief</name>
-            <fieldText>&lt;p&gt;&lt;b&gt;Prospect brief&lt;/b&gt;&lt;/p&gt;&lt;p&gt;{!BriefHtml}&lt;/p&gt;</fieldText>
-            <fieldType>DisplayText</fieldType>
+            <dataType>String</dataType>
+            <defaultValue><elementReference>Generate_Brief.promptResponse</elementReference></defaultValue>
+            <fieldText>Prospect brief</fieldText>
+            <fieldType>LargeTextArea</fieldType>
+            <isRequired>false</isRequired>
         </fields>
         <fields>
             <name>NextStep</name>
-            <fieldText>&lt;p&gt;&lt;b&gt;Suggested next step&lt;/b&gt;&lt;/p&gt;&lt;p&gt;{!NextHtml}&lt;/p&gt;</fieldText>
-            <fieldType>DisplayText</fieldType>
+            <dataType>String</dataType>
+            <defaultValue><elementReference>Generate_Next_Step.promptResponse</elementReference></defaultValue>
+            <fieldText>Suggested next step</fieldText>
+            <fieldType>LargeTextArea</fieldType>
+            <isRequired>false</isRequired>
         </fields>
         <showFooter>true</showFooter>
         <showHeader>true</showHeader>

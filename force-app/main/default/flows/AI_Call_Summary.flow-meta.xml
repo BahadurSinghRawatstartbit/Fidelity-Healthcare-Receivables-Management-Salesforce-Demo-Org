@@ -21,11 +21,6 @@
             <label>Not enough notes</label>
         </rules>
     </decisions>
-    <formulas>
-        <name>SummaryHtml</name>
-        <dataType>String</dataType>
-        <expression>SUBSTITUTE({!Generate_Summary.promptResponse}, BR(), &quot;&lt;br&gt;&quot;)</expression>
-    </formulas>
     <interviewLabel>AI Call Summary {!$Flow.CurrentDateTime}</interviewLabel>
     <label>AI Call Summary</label>
     <processType>Flow</processType>
@@ -115,8 +110,11 @@
         </fields>
         <fields>
             <name>SavedSummary</name>
-            <fieldText>&lt;p&gt;&lt;b&gt;Summary&lt;/b&gt;&lt;/p&gt;&lt;p&gt;{!SummaryHtml}&lt;/p&gt;</fieldText>
-            <fieldType>DisplayText</fieldType>
+            <dataType>String</dataType>
+            <defaultValue><elementReference>Generate_Summary.promptResponse</elementReference></defaultValue>
+            <fieldText>Summary</fieldText>
+            <fieldType>LargeTextArea</fieldType>
+            <isRequired>false</isRequired>
         </fields>
         <showFooter>true</showFooter>
         <showHeader>true</showHeader>

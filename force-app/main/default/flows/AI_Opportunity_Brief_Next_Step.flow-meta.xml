@@ -2,16 +2,6 @@
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>62.0</apiVersion>
     <environments>Default</environments>
-    <formulas>
-        <name>BriefHtml</name>
-        <dataType>String</dataType>
-        <expression>SUBSTITUTE({!Generate_Brief.promptResponse}, BR(), &quot;&lt;br&gt;&quot;)</expression>
-    </formulas>
-    <formulas>
-        <name>NextHtml</name>
-        <dataType>String</dataType>
-        <expression>SUBSTITUTE({!Generate_Next_Step.promptResponse}, BR(), &quot;&lt;br&gt;&quot;)</expression>
-    </formulas>
     <interviewLabel>AI Opportunity Brief and Next Step {!$Flow.CurrentDateTime}</interviewLabel>
     <label>AI Opportunity Brief and Next Step</label>
     <processType>Flow</processType>
@@ -84,13 +74,19 @@
         </fields>
         <fields>
             <name>Brief</name>
-            <fieldText>&lt;p&gt;&lt;b&gt;Deal brief&lt;/b&gt;&lt;/p&gt;&lt;p&gt;{!BriefHtml}&lt;/p&gt;</fieldText>
-            <fieldType>DisplayText</fieldType>
+            <dataType>String</dataType>
+            <defaultValue><elementReference>Generate_Brief.promptResponse</elementReference></defaultValue>
+            <fieldText>Deal brief</fieldText>
+            <fieldType>LargeTextArea</fieldType>
+            <isRequired>false</isRequired>
         </fields>
         <fields>
             <name>NextStep</name>
-            <fieldText>&lt;p&gt;&lt;b&gt;Suggested next step&lt;/b&gt;&lt;/p&gt;&lt;p&gt;{!NextHtml}&lt;/p&gt;</fieldText>
-            <fieldType>DisplayText</fieldType>
+            <dataType>String</dataType>
+            <defaultValue><elementReference>Generate_Next_Step.promptResponse</elementReference></defaultValue>
+            <fieldText>Suggested next step</fieldText>
+            <fieldType>LargeTextArea</fieldType>
+            <isRequired>false</isRequired>
         </fields>
         <showFooter>true</showFooter>
         <showHeader>true</showHeader>

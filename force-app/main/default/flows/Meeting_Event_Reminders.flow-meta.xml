@@ -10,6 +10,7 @@
         <locationY>200</locationY>
         <actionName>Lead.Meeting_Reminder_Email</actionName>
         <actionType>emailAlert</actionType>
+        <faultConnector><targetReference>Email_Skipped_Send_Reminder_24h</targetReference></faultConnector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>SObjectRowId</name>
@@ -24,6 +25,7 @@
         <locationY>200</locationY>
         <actionName>Lead.Meeting_Reminder_Email</actionName>
         <actionType>emailAlert</actionType>
+        <faultConnector><targetReference>Email_Skipped_Send_Reminder_1h</targetReference></faultConnector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>SObjectRowId</name>
@@ -38,6 +40,7 @@
         <locationY>200</locationY>
         <actionName>Lead.Meeting_Reminder_Email</actionName>
         <actionType>emailAlert</actionType>
+        <faultConnector><targetReference>Email_Skipped_Send_Reminder_15m</targetReference></faultConnector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>SObjectRowId</name>
@@ -45,6 +48,39 @@
         </inputParameters>
         <nameSegment>Lead.Meeting_Reminder_Email</nameSegment>
     </actionCalls>
+    <assignments>
+        <name>Email_Skipped_Send_Reminder_24h</name>
+        <label>Email Skipped Send Reminder 24h</label>
+        <locationX>600</locationX>
+        <locationY>600</locationY>
+        <assignmentItems>
+            <assignToReference>SkipNote</assignToReference>
+            <operator>Assign</operator>
+            <value><stringValue>email skipped</stringValue></value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Email_Skipped_Send_Reminder_1h</name>
+        <label>Email Skipped Send Reminder 1h</label>
+        <locationX>600</locationX>
+        <locationY>600</locationY>
+        <assignmentItems>
+            <assignToReference>SkipNote</assignToReference>
+            <operator>Assign</operator>
+            <value><stringValue>email skipped</stringValue></value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Email_Skipped_Send_Reminder_15m</name>
+        <label>Email Skipped Send Reminder 15m</label>
+        <locationX>600</locationX>
+        <locationY>600</locationY>
+        <assignmentItems>
+            <assignToReference>SkipNote</assignToReference>
+            <operator>Assign</operator>
+            <value><stringValue>email skipped</stringValue></value>
+        </assignmentItems>
+    </assignments>
     <interviewLabel>Meeting Event Reminders {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Meeting Event Reminders</label>
     <processType>AutoLaunchedFlow</processType>
@@ -85,4 +121,11 @@
         <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>
+    <variables>
+        <name>SkipNote</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
 </Flow>

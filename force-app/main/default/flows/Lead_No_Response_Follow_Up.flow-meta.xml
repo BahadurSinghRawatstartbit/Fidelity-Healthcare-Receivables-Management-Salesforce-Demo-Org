@@ -11,6 +11,7 @@
         <actionName>Lead.Lead_No_Response_Email</actionName>
         <actionType>emailAlert</actionType>
         <connector><targetReference>Create_Escalation_Task</targetReference></connector>
+        <faultConnector><targetReference>Create_Escalation_Task</targetReference></faultConnector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>SObjectRowId</name>

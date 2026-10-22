@@ -26,11 +26,6 @@
         <dataType>String</dataType>
         <expression>IF(ISBLANK({!Get_Latest_Call.AI_Summary__c}), IF(ISBLANK({!Get_Latest_Call.Call_Notes__c}), "None recorded.", {!Get_Latest_Call.Call_Notes__c}), {!Get_Latest_Call.AI_Summary__c})</expression>
     </formulas>
-    <formulas>
-        <name>DraftHtml</name>
-        <dataType>String</dataType>
-        <expression>SUBSTITUTE({!Generate_Draft.promptResponse}, BR(), &quot;&lt;br&gt;&quot;)</expression>
-    </formulas>
     <interviewLabel>AI Email Draft {!$Flow.CurrentDateTime}</interviewLabel>
     <label>AI Email Draft</label>
     <processType>Flow</processType>
@@ -130,8 +125,11 @@
         </fields>
         <fields>
             <name>EmailDraft</name>
-            <fieldText>&lt;p&gt;&lt;b&gt;Email draft (select and copy)&lt;/b&gt;&lt;/p&gt;&lt;p&gt;{!DraftHtml}&lt;/p&gt;</fieldText>
-            <fieldType>DisplayText</fieldType>
+            <dataType>String</dataType>
+            <defaultValue><elementReference>Generate_Draft.promptResponse</elementReference></defaultValue>
+            <fieldText>Email draft</fieldText>
+            <fieldType>LargeTextArea</fieldType>
+            <isRequired>false</isRequired>
         </fields>
         <showFooter>true</showFooter>
         <showHeader>true</showHeader>

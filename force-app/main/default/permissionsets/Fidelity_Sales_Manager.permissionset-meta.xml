@@ -7,6 +7,16 @@
     <description>Sales head: sees every lead, opportunity and call, edits all of them, and reads the dashboards.</description>
     <fieldPermissions>
         <editable>true</editable>
+        <field>Call_Log__c.Call_Duration_Seconds__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Call_Log__c.Call_Duration_Display__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>Lead.Meeting_Duration_Minutes__c</field>
         <readable>true</readable>
     </fieldPermissions>

@@ -10,6 +10,7 @@
         <connector>
             <targetReference>Update_Lead_Status_Meeting_Scheduled</targetReference>
         </connector>
+        <faultConnector><targetReference>Update_Lead_Status_Meeting_Scheduled</targetReference></faultConnector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>SObjectRowId</name>
