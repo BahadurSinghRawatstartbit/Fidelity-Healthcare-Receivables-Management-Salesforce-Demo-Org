@@ -1,0 +1,9 @@
+Hi {!Opportunity.Primary_Contact__c},
+
+We haven't heard back since sending over the "{!Opportunity.Name}" proposal, and wanted to make sure it didn't get lost in your inbox.
+
+Let us know if you have any questions, or if now isn't the right time - we're happy to follow up whenever works best for you.
+
+Best regards,
+{!Opportunity.OwnerFullName}
+Fidelity Healthcare Receivables Management

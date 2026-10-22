@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>All_Calls_Audit</fullName>
+    <columns>NAME</columns>
+    <columns>Lead__c</columns>
+    <columns>Contact__c</columns>
+    <columns>Call_Type__c</columns>
+    <columns>Call_Outcome__c</columns>
+    <columns>Call_Date_Time__c</columns>
+    <columns>Call_Duration_Minutes__c</columns>
+    <columns>Recording_URL__c</columns>
+    <columns>OWNER.ALIAS</columns>
+    <filterScope>Everything</filterScope>
+    <label>All Calls (Audit)</label>
+    <sharedTo>
+        <allInternalUsers></allInternalUsers>
+    </sharedTo>
+</ListView>

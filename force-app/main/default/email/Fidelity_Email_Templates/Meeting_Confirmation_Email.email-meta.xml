@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>Sent automatically when a discovery meeting is scheduled on a Lead.</description>
+    <encodingKey>UTF-8</encodingKey>
+    <name>Meeting Confirmation Email</name>
+    <style>none</style>
+    <subject>Confirmed: Your discovery meeting with Fidelity Healthcare Receivables Management</subject>
+    <type>text</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

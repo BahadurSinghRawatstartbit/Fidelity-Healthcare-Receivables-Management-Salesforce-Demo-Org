@@ -39,4 +39,15 @@
         <senderType>CurrentUser</senderType>
         <template>Fidelity_Email_Templates/Meeting_Reminder_Email</template>
     </alerts>
+    <alerts>
+        <fullName>Lead_No_Response_Email</fullName>
+        <description>Lead No Response Follow-Up Email</description>
+        <protected>false</protected>
+        <recipients>
+            <field>Email</field>
+            <type>email</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>Fidelity_Email_Templates/Lead_No_Response_Email</template>
+    </alerts>
 </Workflow>

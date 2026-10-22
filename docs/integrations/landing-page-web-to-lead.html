@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fidelity Healthcare Receivables Management - Request a Consultation</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f6f9; margin: 0; padding: 24px; color: #1b2733; }
+    form { max-width: 460px; margin: 0 auto; background: #fff; padding: 28px; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,.15); }
+    h1 { font-size: 20px; margin: 0 0 4px; }
+    p.sub { margin: 0 0 20px; color: #5b6b7b; font-size: 14px; }
+    label { display: block; font-size: 13px; margin: 14px 0 4px; }
+    input, textarea { width: 100%; box-sizing: border-box; padding: 9px; border: 1px solid #c3ccd6; border-radius: 4px; font-size: 14px; }
+    button { margin-top: 20px; width: 100%; padding: 11px; background: #0b5cab; color: #fff; border: 0; border-radius: 4px; font-size: 15px; cursor: pointer; }
+    .note { font-size: 11px; color: #7a8896; margin-top: 14px; }
+  </style>
+</head>
+<body>
+  <!--
+    HOW THIS WORKS
+    This posts straight into the Salesforce org as a new Lead. No code or login is needed on the page.
+    The Lead Assignment flow then routes it to the right queue and the assignment notification fires.
+
+    BEFORE IT WORKS (one-time, in Salesforce Setup):
+      1. Setup > Web-to-Lead > "Enable Web-to-Lead" (tick it, save).
+      2. Setup > Web-to-Lead > Create Web-to-Lead Form is optional - this file already contains the form.
+
+    FIELD NOTES
+      oid         = the org id (already filled in below)
+      lead_source = hidden, so every submission is tagged "Google Campaign"
+      retURL      = where the visitor lands after submitting (replace with your thank-you page)
+
+    SECURITY NOTE: Web-to-Lead is public and unauthenticated. Do not collect health or patient
+    information through this form - only business contact details.
+  -->
+  <form action="https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8" method="POST">
+    <input type="hidden" name="oid" value="00Dg800000OSUIHEA5">
+    <input type="hidden" name="retURL" value="https://www.example.com/thank-you">
+    <input type="hidden" name="lead_source" value="Google Campaign">
+
+    <h1>Request a consultation</h1>
+    <p class="sub">Tell us about your practice and we will be in touch.</p>
+
+    <label for="first_name">First name</label>
+    <input id="first_name" name="first_name" maxlength="40" type="text" required>
+
+    <label for="last_name">Last name</label>
+    <input id="last_name" name="last_name" maxlength="80" type="text" required>
+
+    <label for="company">Practice name</label>
+    <input id="company" name="company" maxlength="40" type="text" required>
+
+    <label for="email">Email</label>
+    <input id="email" name="email" maxlength="80" type="email" required>
+
+    <label for="phone">Phone</label>
+    <input id="phone" name="phone" maxlength="40" type="tel">
+
+    <button type="submit">Request consultation</button>
+    <p class="note">We only use these details to contact you about our services.</p>
+  </form>
+</body>
+</html>

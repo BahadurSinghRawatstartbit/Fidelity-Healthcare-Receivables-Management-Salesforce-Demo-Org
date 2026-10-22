@@ -1,0 +1,43 @@
+<template>
+    <lightning-quick-action-panel header="Schedule Discovery Meeting">
+        <template lwc:if={isLoading}>
+            <lightning-spinner alternative-text="Loading available times" size="medium"></lightning-spinner>
+        </template>
+        <template lwc:elseif={error}>
+            <p class="slds-text-color_error">{error}</p>
+        </template>
+        <template lwc:elseif={hasDays}>
+            <p class="slds-m-bottom_small">Pick an available time. The prospect gets a confirmation and automatic reminders.</p>
+            <template for:each={days} for:item="day">
+                <div key={day.label} class="slds-m-bottom_medium">
+                    <h3 class="slds-text-heading_small slds-m-bottom_x-small">{day.label}</h3>
+                    <div class="slds-grid slds-wrap">
+                        <template for:each={day.slots} for:item="slot">
+                            <lightning-button
+                                key={slot.value}
+                                class="slds-m-right_x-small slds-m-bottom_x-small"
+                                label={slot.timeLabel}
+                                data-value={slot.value}
+                                variant={slot.variant}
+                                onclick={handleSelect}>
+                            </lightning-button>
+                        </template>
+                    </div>
+                </div>
+            </template>
+        </template>
+        <template lwc:else>
+            <p>No free times were found in the next five business days.</p>
+        </template>
+        <div slot="footer">
+            <lightning-button variant="neutral" label="Cancel" onclick={handleCancel}></lightning-button>
+            <lightning-button
+                class="slds-m-left_x-small"
+                variant="brand"
+                label="Schedule Meeting"
+                disabled={isScheduleDisabled}
+                onclick={handleSchedule}>
+            </lightning-button>
+        </div>
+    </lightning-quick-action-panel>
+</template>

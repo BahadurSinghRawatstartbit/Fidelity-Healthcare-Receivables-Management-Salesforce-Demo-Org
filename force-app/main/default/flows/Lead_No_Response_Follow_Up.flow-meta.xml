@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <environments>Default</environments>
+    <actionCalls>
+        <name>Send_No_Response_Email</name>
+        <label>Send No Response Email</label>
+        <locationX>50</locationX>
+        <locationY>242</locationY>
+        <actionName>Lead.Lead_No_Response_Email</actionName>
+        <actionType>emailAlert</actionType>
+        <connector><targetReference>Create_Escalation_Task</targetReference></connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value><elementReference>$Record.Id</elementReference></value>
+        </inputParameters>
+        <nameSegment>Lead.Lead_No_Response_Email</nameSegment>
+    </actionCalls>
+    <formulas>
+        <name>DueInThreeDays</name>
+        <dataType>Date</dataType>
+        <expression>{!$Flow.CurrentDate} + 3</expression>
+    </formulas>
+    <interviewLabel>Lead No Response Follow Up {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Lead No Response Follow Up</label>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <name>Create_Escalation_Task</name>
+        <label>Create Escalation Task</label>
+        <locationX>50</locationX>
+        <locationY>350</locationY>
+        <connector><targetReference>Mark_Follow_Up_Sent</targetReference></connector>
+        <inputAssignments>
+            <field>ActivityDate</field>
+            <value>
+                <elementReference>DueInThreeDays</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>$Record.LastModifiedById</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Priority</field>
+            <value>
+                <stringValue>Normal</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Open</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <stringValue>Escalation: lead has not responded - call again or close out</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhoId</field>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+    </recordCreates>
+    <recordUpdates>
+        <name>Mark_Follow_Up_Sent</name>
+        <label>Mark Follow Up Sent</label>
+        <locationX>50</locationX>
+        <locationY>458</locationY>
+        <inputAssignments>
+            <field>Call_Outcome__c</field>
+            <value><stringValue>Follow-up Required</stringValue></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Next_Follow_Up_Date__c</field>
+            <value><elementReference>DueInThreeDays</elementReference></value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector><targetReference>Send_No_Response_Email</targetReference></connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Call_Outcome__c</field>
+            <operator>EqualTo</operator>
+            <value><stringValue>No Response</stringValue></value>
+        </filters>
+        <filters>
+            <field>IsConverted</field>
+            <operator>EqualTo</operator>
+            <value><booleanValue>false</booleanValue></value>
+        </filters>
+        <object>Lead</object>
+        <schedule>
+            <frequency>Daily</frequency>
+            <startDate>2026-10-22</startDate>
+            <startTime>09:00:00.000Z</startTime>
+        </schedule>
+        <triggerType>Scheduled</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

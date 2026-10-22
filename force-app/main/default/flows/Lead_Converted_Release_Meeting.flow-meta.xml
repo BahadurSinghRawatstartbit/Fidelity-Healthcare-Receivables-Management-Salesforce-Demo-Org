@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <environments>Default</environments>
+    <interviewLabel>Lead Converted Release Meeting {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Lead Converted Release Meeting</label>
+    <processType>AutoLaunchedFlow</processType>
+    <decisions>
+        <name>Has_Previous_Meetings</name>
+        <label>Has Previous Meetings?</label>
+        <locationX>50</locationX>
+        <locationY>120</locationY>
+        
+        <defaultConnectorLabel>None</defaultConnectorLabel>
+        <rules>
+            <name>Found</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Previous_Future_Meetings</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue><booleanValue>false</booleanValue></rightValue>
+            </conditions>
+            <connector><targetReference>Delete_Future_Meetings</targetReference></connector>
+            <label>Found</label>
+        </rules>
+    </decisions>
+    <recordLookups>
+        <name>Get_Previous_Future_Meetings</name>
+        <label>Get Previous Future Meetings</label>
+        <locationX>50</locationX>
+        <locationY>60</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector><targetReference>Has_Previous_Meetings</targetReference></connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>WhoId</field>
+            <operator>EqualTo</operator>
+            <value><elementReference>$Record.ConvertedContactId</elementReference></value>
+        </filters>
+        <filters>
+            <field>Subject</field>
+            <operator>EqualTo</operator>
+            <value><stringValue>Discovery Meeting</stringValue></value>
+        </filters>
+        <filters>
+            <field>StartDateTime</field>
+            <operator>GreaterThan</operator>
+            <value><elementReference>$Flow.CurrentDateTime</elementReference></value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>Event</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordDeletes>
+        <name>Delete_Future_Meetings</name>
+        <label>Delete Previous Future Meetings</label>
+        <locationX>50</locationX>
+        <locationY>180</locationY>
+        
+        <inputReference>Get_Previous_Future_Meetings</inputReference>
+    </recordDeletes>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector><targetReference>Get_Previous_Future_Meetings</targetReference></connector>
+        <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>IsConverted</field>
+            <operator>EqualTo</operator>
+            <value><booleanValue>true</booleanValue></value>
+        </filters>
+        <object>Lead</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

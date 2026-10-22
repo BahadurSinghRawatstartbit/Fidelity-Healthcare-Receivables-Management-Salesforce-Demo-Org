@@ -19,54 +19,6 @@
         </inputParameters>
         <nameSegment>Lead.Meeting_Confirmation_Email</nameSegment>
     </actionCalls>
-    <actionCalls>
-        <name>Send_Reminder_15m</name>
-        <label>Send Reminder - 15 Minutes</label>
-        <locationX>700</locationX>
-        <locationY>158</locationY>
-        <actionName>Lead.Meeting_Reminder_Email</actionName>
-        <actionType>emailAlert</actionType>
-        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
-        <inputParameters>
-            <name>SObjectRowId</name>
-            <value>
-                <elementReference>$Record.Id</elementReference>
-            </value>
-        </inputParameters>
-        <nameSegment>Lead.Meeting_Reminder_Email</nameSegment>
-    </actionCalls>
-    <actionCalls>
-        <name>Send_Reminder_1h</name>
-        <label>Send Reminder - 1 Hour</label>
-        <locationX>500</locationX>
-        <locationY>158</locationY>
-        <actionName>Lead.Meeting_Reminder_Email</actionName>
-        <actionType>emailAlert</actionType>
-        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
-        <inputParameters>
-            <name>SObjectRowId</name>
-            <value>
-                <elementReference>$Record.Id</elementReference>
-            </value>
-        </inputParameters>
-        <nameSegment>Lead.Meeting_Reminder_Email</nameSegment>
-    </actionCalls>
-    <actionCalls>
-        <name>Send_Reminder_24h</name>
-        <label>Send Reminder - 24 Hours</label>
-        <locationX>300</locationX>
-        <locationY>158</locationY>
-        <actionName>Lead.Meeting_Reminder_Email</actionName>
-        <actionType>emailAlert</actionType>
-        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
-        <inputParameters>
-            <name>SObjectRowId</name>
-            <value>
-                <elementReference>$Record.Id</elementReference>
-            </value>
-        </inputParameters>
-        <nameSegment>Lead.Meeting_Reminder_Email</nameSegment>
-    </actionCalls>
     <apiVersion>62.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <environments>Default</environments>
@@ -78,6 +30,60 @@
     <interviewLabel>Meeting Scheduling And Reminders {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Meeting Scheduling And Reminders</label>
     <processType>AutoLaunchedFlow</processType>
+    <decisions>
+        <name>Has_Previous_Meetings</name>
+        <label>Has Previous Meetings?</label>
+        <locationX>50</locationX>
+        <locationY>120</locationY>
+        <defaultConnector><targetReference>Create_Discovery_Meeting_Event</targetReference></defaultConnector>
+        <defaultConnectorLabel>None</defaultConnectorLabel>
+        <rules>
+            <name>Found</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Previous_Future_Meetings</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue><booleanValue>false</booleanValue></rightValue>
+            </conditions>
+            <connector><targetReference>Delete_Previous_Future_Meeting</targetReference></connector>
+            <label>Found</label>
+        </rules>
+    </decisions>
+    <recordLookups>
+        <name>Get_Previous_Future_Meetings</name>
+        <label>Get Previous Future Meetings</label>
+        <locationX>50</locationX>
+        <locationY>60</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector><targetReference>Has_Previous_Meetings</targetReference></connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>WhoId</field>
+            <operator>EqualTo</operator>
+            <value><elementReference>$Record.Id</elementReference></value>
+        </filters>
+        <filters>
+            <field>Subject</field>
+            <operator>EqualTo</operator>
+            <value><stringValue>Discovery Meeting</stringValue></value>
+        </filters>
+        <filters>
+            <field>StartDateTime</field>
+            <operator>GreaterThan</operator>
+            <value><elementReference>$Flow.CurrentDateTime</elementReference></value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>Event</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordDeletes>
+        <name>Delete_Previous_Future_Meeting</name>
+        <label>Delete Previous Future Meetings</label>
+        <locationX>50</locationX>
+        <locationY>180</locationY>
+        <connector><targetReference>Create_Discovery_Meeting_Event</targetReference></connector>
+        <inputReference>Get_Previous_Future_Meetings</inputReference>
+    </recordDeletes>
     <recordCreates>
         <name>Create_Discovery_Meeting_Event</name>
         <label>Create Discovery Meeting Event</label>
@@ -143,52 +149,12 @@
         <locationX>50</locationX>
         <locationY>50</locationY>
         <connector>
-            <targetReference>Create_Discovery_Meeting_Event</targetReference>
+            <targetReference>Get_Previous_Future_Meetings</targetReference>
         </connector>
-        <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Meeting_Date_Time__c</field>
-            <operator>IsNull</operator>
-            <value>
-                <booleanValue>false</booleanValue>
-            </value>
-        </filters>
+        <filterFormula>AND(NOT(ISBLANK({!$Record.Meeting_Date_Time__c})), OR(ISNEW(), ISCHANGED({!$Record.Meeting_Date_Time__c})))</filterFormula>
+        <filterLogic>formula_evaluates_to_true</filterLogic>
         <object>Lead</object>
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
-        <scheduledPaths>
-            <name>Reminder_24_Hours_Before</name>
-            <connector>
-                <targetReference>Send_Reminder_24h</targetReference>
-            </connector>
-            <label>24 Hours Before</label>
-            <offsetNumber>-24</offsetNumber>
-            <offsetUnit>Hours</offsetUnit>
-            <recordField>Meeting_Date_Time__c</recordField>
-            <timeSource>RecordField</timeSource>
-        </scheduledPaths>
-        <scheduledPaths>
-            <name>Reminder_1_Hour_Before</name>
-            <connector>
-                <targetReference>Send_Reminder_1h</targetReference>
-            </connector>
-            <label>1 Hour Before</label>
-            <offsetNumber>-1</offsetNumber>
-            <offsetUnit>Hours</offsetUnit>
-            <recordField>Meeting_Date_Time__c</recordField>
-            <timeSource>RecordField</timeSource>
-        </scheduledPaths>
-        <scheduledPaths>
-            <name>Reminder_15_Minutes_Before</name>
-            <connector>
-                <targetReference>Send_Reminder_15m</targetReference>
-            </connector>
-            <label>15 Minutes Before</label>
-            <offsetNumber>-15</offsetNumber>
-            <offsetUnit>Minutes</offsetUnit>
-            <recordField>Meeting_Date_Time__c</recordField>
-            <timeSource>RecordField</timeSource>
-        </scheduledPaths>
         <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>

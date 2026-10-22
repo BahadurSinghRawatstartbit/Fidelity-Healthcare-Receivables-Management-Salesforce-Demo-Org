@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <environments>Default</environments>
+    <actionCalls>
+        <name>Send_Reminder_24h</name>
+        <label>Send Reminder - 24 Hours</label>
+        <locationX>50</locationX>
+        <locationY>200</locationY>
+        <actionName>Lead.Meeting_Reminder_Email</actionName>
+        <actionType>emailAlert</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value><elementReference>$Record.WhoId</elementReference></value>
+        </inputParameters>
+        <nameSegment>Lead.Meeting_Reminder_Email</nameSegment>
+    </actionCalls>
+    <actionCalls>
+        <name>Send_Reminder_1h</name>
+        <label>Send Reminder - 1 Hour</label>
+        <locationX>50</locationX>
+        <locationY>200</locationY>
+        <actionName>Lead.Meeting_Reminder_Email</actionName>
+        <actionType>emailAlert</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value><elementReference>$Record.WhoId</elementReference></value>
+        </inputParameters>
+        <nameSegment>Lead.Meeting_Reminder_Email</nameSegment>
+    </actionCalls>
+    <actionCalls>
+        <name>Send_Reminder_15m</name>
+        <label>Send Reminder - 15 Minutes</label>
+        <locationX>50</locationX>
+        <locationY>200</locationY>
+        <actionName>Lead.Meeting_Reminder_Email</actionName>
+        <actionType>emailAlert</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value><elementReference>$Record.WhoId</elementReference></value>
+        </inputParameters>
+        <nameSegment>Lead.Meeting_Reminder_Email</nameSegment>
+    </actionCalls>
+    <interviewLabel>Meeting Event Reminders {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Meeting Event Reminders</label>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <filterFormula>AND({!$Record.Subject} = "Discovery Meeting", LEFT({!$Record.WhoId}, 3) = "00Q")</filterFormula>
+        <filterLogic>formula_evaluates_to_true</filterLogic>
+        <object>Event</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <scheduledPaths>
+            <name>Reminder_24_Hours_Before</name>
+            <connector><targetReference>Send_Reminder_24h</targetReference></connector>
+            <label>24 Hours Before</label>
+            <offsetNumber>-24</offsetNumber>
+            <offsetUnit>Hours</offsetUnit>
+            <recordField>StartDateTime</recordField>
+            <timeSource>RecordField</timeSource>
+        </scheduledPaths>
+        <scheduledPaths>
+            <name>Reminder_1_Hour_Before</name>
+            <connector><targetReference>Send_Reminder_1h</targetReference></connector>
+            <label>1 Hour Before</label>
+            <offsetNumber>-1</offsetNumber>
+            <offsetUnit>Hours</offsetUnit>
+            <recordField>StartDateTime</recordField>
+            <timeSource>RecordField</timeSource>
+        </scheduledPaths>
+        <scheduledPaths>
+            <name>Reminder_15_Minutes_Before</name>
+            <connector><targetReference>Send_Reminder_15m</targetReference></connector>
+            <label>15 Minutes Before</label>
+            <offsetNumber>-15</offsetNumber>
+            <offsetUnit>Minutes</offsetUnit>
+            <recordField>StartDateTime</recordField>
+            <timeSource>RecordField</timeSource>
+        </scheduledPaths>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dashboard xmlns="http://soap.sforce.com/2006/04/metadata">
+    <backgroundEndColor>#FFFFFF</backgroundEndColor>
+    <backgroundFadeDirection>Diagonal</backgroundFadeDirection>
+    <backgroundStartColor>#FFFFFF</backgroundStartColor>
+    <chartTheme>light</chartTheme>
+    <colorPalette>unity</colorPalette>
+    <dashboardChartTheme>light</dashboardChartTheme>
+    <dashboardColorPalette>unity</dashboardColorPalette>
+    <dashboardType>LoggedInUser</dashboardType>
+    <description>Lead volume, sources, calling activity, meetings, pipeline, proposals, follow-ups and won/lost.</description>
+    <isGridLayout>false</isGridLayout>
+    <leftSection>
+        <columnSize>Medium</columnSize>
+        <components>
+            <chartAxisRange>Auto</chartAxisRange>
+            <componentType>Column</componentType>
+            <displayUnits>Auto</displayUnits>
+            <drillEnabled>false</drillEnabled>
+            <drillToDetailEnabled>false</drillToDetailEnabled>
+            <enableHover>true</enableHover>
+            <header>Leads by Status</header>
+            <legendPosition>Bottom</legendPosition>
+            <report>Fidelity_Sales_Reports/Leads_by_Status</report>
+            <showPercentage>false</showPercentage>
+            <showValues>true</showValues>
+            <sortBy>RowLabelAscending</sortBy>
+            <title>Leads by Status</title>
+            <useReportChart>true</useReportChart>
+        </components>
+        <components>
+            <chartAxisRange>Auto</chartAxisRange>
+            <componentType>Donut</componentType>
+            <displayUnits>Auto</displayUnits>
+            <drillEnabled>false</drillEnabled>
+            <drillToDetailEnabled>false</drillToDetailEnabled>
+            <enableHover>true</enableHover>
+            <header>Leads by Source</header>
+            <legendPosition>Bottom</legendPosition>
+            <report>Fidelity_Sales_Reports/Leads_by_Source</report>
+            <showPercentage>false</showPercentage>
+            <showValues>true</showValues>
+            <sortBy>RowLabelAscending</sortBy>
+            <title>Leads by Source</title>
+            <useReportChart>true</useReportChart>
+        </components>
+        <components>
+            <componentType>Table</componentType>
+            <dashboardTableColumn>
+                <column>Lead$FirstName</column>
+                <sortBy>RowLabelAscending</sortBy>
+            </dashboardTableColumn>
+            <dashboardTableColumn>
+                <column>Lead$LastName</column>
+            </dashboardTableColumn>
+            <dashboardTableColumn>
+                <column>Lead$Company</column>
+            </dashboardTableColumn>
+            <displayUnits>Auto</displayUnits>
+            <drillEnabled>false</drillEnabled>
+            <drillToDetailEnabled>false</drillToDetailEnabled>
+            <enableHover>false</enableHover>
+            <header>Leads Needing Follow-up</header>
+            <indicatorBreakpoint1>0.0</indicatorBreakpoint1>
+            <indicatorBreakpoint2>0.0</indicatorBreakpoint2>
+            <indicatorHighColor>#54C254</indicatorHighColor>
+            <indicatorLowColor>#C25454</indicatorLowColor>
+            <indicatorMiddleColor>#C2C254</indicatorMiddleColor>
+            <report>Fidelity_Sales_Reports/Leads_Needing_Follow_Up</report>
+            <showPicturesOnTables>false</showPicturesOnTables>
+            <title>Leads Needing Follow-up</title>
+            <useReportChart>false</useReportChart>
+        </components>
+    </leftSection>
+    <middleSection>
+        <columnSize>Medium</columnSize>
+        <components>
+            <chartAxisRange>Auto</chartAxisRange>
+            <componentType>Funnel</componentType>
+            <displayUnits>Auto</displayUnits>
+            <drillEnabled>false</drillEnabled>
+            <drillToDetailEnabled>false</drillToDetailEnabled>
+            <enableHover>true</enableHover>
+            <header>Pipeline by Stage</header>
+            <legendPosition>Bottom</legendPosition>
+            <report>Fidelity_Sales_Reports/Pipeline_by_Stage</report>
+            <showPercentage>false</showPercentage>
+            <showValues>true</showValues>
+            <sortBy>RowLabelAscending</sortBy>
+            <title>Pipeline by Stage</title>
+            <useReportChart>true</useReportChart>
+        </components>
+        <components>
+            <chartAxisRange>Auto</chartAxisRange>
+            <componentType>Donut</componentType>
+            <displayUnits>Auto</displayUnits>
+            <drillEnabled>false</drillEnabled>
+            <drillToDetailEnabled>false</drillToDetailEnabled>
+            <enableHover>true</enableHover>
+            <header>Closed Won vs Lost</header>
+            <legendPosition>Bottom</legendPosition>
+            <report>Fidelity_Sales_Reports/Won_and_Lost</report>
+            <showPercentage>false</showPercentage>
+            <showValues>true</showValues>
+            <sortBy>RowLabelAscending</sortBy>
+            <title>Closed Won vs Lost</title>
+            <useReportChart>true</useReportChart>
+        </components>
+        <components>
+            <componentType>Table</componentType>
+            <dashboardTableColumn>
+                <column>OPPORTUNITY_NAME</column>
+                <sortBy>RowLabelAscending</sortBy>
+            </dashboardTableColumn>
+            <dashboardTableColumn>
+                <column>ACCOUNT_NAME</column>
+            </dashboardTableColumn>
+            <dashboardTableColumn>
+                <column>STAGE_NAME</column>
+            </dashboardTableColumn>
+            <displayUnits>Auto</displayUnits>
+            <drillEnabled>false</drillEnabled>
+            <drillToDetailEnabled>false</drillToDetailEnabled>
+            <enableHover>false</enableHover>
+            <header>Proposals Awaiting Response</header>
+            <indicatorBreakpoint1>0.0</indicatorBreakpoint1>
+            <indicatorBreakpoint2>0.0</indicatorBreakpoint2>
+            <indicatorHighColor>#54C254</indicatorHighColor>
+            <indicatorLowColor>#C25454</indicatorLowColor>
+            <indicatorMiddleColor>#C2C254</indicatorMiddleColor>
+            <report>Fidelity_Sales_Reports/Proposals_Sent</report>
+            <showPicturesOnTables>false</showPicturesOnTables>
+            <title>Proposals Awaiting Response</title>
+            <useReportChart>false</useReportChart>
+        </components>
+    </middleSection>
+    <rightSection>
+        <columnSize>Medium</columnSize>
+        <components>
+            <chartAxisRange>Auto</chartAxisRange>
+            <componentType>Column</componentType>
+            <displayUnits>Auto</displayUnits>
+            <drillEnabled>false</drillEnabled>
+            <drillToDetailEnabled>false</drillToDetailEnabled>
+            <enableHover>true</enableHover>
+            <header>Activities by Type</header>
+            <legendPosition>Bottom</legendPosition>
+            <report>Fidelity_Sales_Reports/Activities_by_Type</report>
+            <showPercentage>false</showPercentage>
+            <showValues>true</showValues>
+            <sortBy>RowLabelAscending</sortBy>
+            <title>Activities by Type</title>
+            <useReportChart>true</useReportChart>
+        </components>
+        <components>
+            <chartAxisRange>Auto</chartAxisRange>
+            <componentType>Bar</componentType>
+            <displayUnits>Auto</displayUnits>
+            <drillEnabled>false</drillEnabled>
+            <drillToDetailEnabled>false</drillToDetailEnabled>
+            <enableHover>true</enableHover>
+            <header>Calls by Outcome</header>
+            <legendPosition>Bottom</legendPosition>
+            <report>Fidelity_Sales_Reports/Calls_by_Outcome</report>
+            <showPercentage>false</showPercentage>
+            <showValues>true</showValues>
+            <sortBy>RowLabelAscending</sortBy>
+            <title>Calls by Outcome</title>
+            <useReportChart>true</useReportChart>
+        </components>
+        <components>
+            <chartAxisRange>Auto</chartAxisRange>
+            <componentType>Bar</componentType>
+            <displayUnits>Auto</displayUnits>
+            <drillEnabled>false</drillEnabled>
+            <drillToDetailEnabled>false</drillToDetailEnabled>
+            <enableHover>true</enableHover>
+            <header>Loss Reasons</header>
+            <legendPosition>Bottom</legendPosition>
+            <report>Fidelity_Sales_Reports/Loss_Reasons</report>
+            <showPercentage>false</showPercentage>
+            <showValues>true</showValues>
+            <sortBy>RowLabelAscending</sortBy>
+            <title>Loss Reasons</title>
+            <useReportChart>true</useReportChart>
+        </components>
+    </rightSection>
+    <textColor>#000000</textColor>
+    <title>Fidelity Sales Management Dashboard</title>
+    <titleColor>#000000</titleColor>
+    <titleSize>12</titleSize>
+</Dashboard>

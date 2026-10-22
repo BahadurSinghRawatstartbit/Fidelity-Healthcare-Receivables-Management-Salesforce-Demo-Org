@@ -30,16 +30,16 @@
     </assignments>
     <decisions>
         <name>Is_Referral</name>
-        <label>Is Referral?</label>
+        <label>Sales-Led Source?</label>
         <locationX>176</locationX>
         <locationY>158</locationY>
         <defaultConnector>
             <targetReference>Get_Calling_Queue</targetReference>
         </defaultConnector>
-        <defaultConnectorLabel>Not a Referral</defaultConnectorLabel>
+        <defaultConnectorLabel>Calling-Team Source</defaultConnectorLabel>
         <rules>
             <name>Referral</name>
-            <conditionLogic>and</conditionLogic>
+            <conditionLogic>or</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.LeadSource</leftValueReference>
                 <operator>EqualTo</operator>
@@ -47,10 +47,24 @@
                     <stringValue>Referral</stringValue>
                 </rightValue>
             </conditions>
+            <conditions>
+                <leftValueReference>$Record.LeadSource</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Inbound Calling</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.LeadSource</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Conference/Event</stringValue>
+                </rightValue>
+            </conditions>
             <connector>
                 <targetReference>Get_Sales_Queue</targetReference>
             </connector>
-            <label>Referral</label>
+            <label>Sales-Led Source</label>
         </rules>
     </decisions>
     <environments>Default</environments>

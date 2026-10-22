@@ -1,0 +1,11 @@
+Hi {!Lead.FirstName},
+
+Your discovery meeting is confirmed for {!Lead.Meeting_Date_Time__c}.
+
+Our sales team will be hosting the call and looks forward to learning more about your practice and current receivables process.
+
+A calendar invite has also been sent separately. You'll receive reminder emails as the meeting approaches.
+
+Best regards,
+The Sales Team
+Fidelity Healthcare Receivables Management

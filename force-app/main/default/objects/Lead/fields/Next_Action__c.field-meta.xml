@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Next_Action__c</fullName>
+    <description>Rule-based suggestion of what should happen next, based on Lead Status. Suggestion only - the salesperson decides.</description>
+    <externalId>false</externalId>
+    <formula>CASE(Status,
+&quot;New Lead&quot;, &quot;Call the lead and record the outcome&quot;,
+&quot;Contacted&quot;, &quot;Confirm interest or schedule a call back&quot;,
+&quot;Interested&quot;, &quot;Schedule the discovery meeting&quot;,
+&quot;Discovery Meeting Scheduled&quot;, &quot;Hold the discovery meeting&quot;,
+&quot;Discovery Completed&quot;, &quot;Qualify the lead and convert to an Opportunity&quot;,
+&quot;Qualified&quot;, &quot;Work the Opportunity - prepare the proposal&quot;,
+&quot;Not Interested&quot;, &quot;No action - review in nurture&quot;,
+&quot;Unqualified&quot;, &quot;No action&quot;,
+&quot;Review lead&quot;)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Suggested Next Action</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>
