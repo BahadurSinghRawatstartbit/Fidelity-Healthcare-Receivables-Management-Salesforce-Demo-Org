@@ -1,10 +1,13 @@
 import { LightningElement, api } from 'lwc';
+import { NavigationMixin } from 'lightning/navigation';
+import { encodeDefaultFieldValues } from 'lightning/pageReferenceUtils';
 import { CloseActionScreenEvent } from 'lightning/actions';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import draftEmail from '@salesforce/apex/AiAssistController.draftEmail';
 
-export default class AiEmailDraft extends LightningElement {
-    @api recordId;
+export default class AiEmailDraft extends NavigationMixin(LightningElement) {
+    _recordId;
+    started = false;
 
     isLoading = true;
     error;
@@ -13,14 +16,24 @@ export default class AiEmailDraft extends LightningElement {
     subject = '';
     body = '';
 
-    connectedCallback() {
-        this.load();
+    // Salesforce hands the record Id to a quick-action component AFTER it is created,
+    // so wait for it instead of loading in connectedCallback.
+    @api
+    get recordId() {
+        return this._recordId;
+    }
+    set recordId(value) {
+        this._recordId = value;
+        if (value && !this.started) {
+            this.started = true;
+            this.load(true);
+        }
     }
 
-    load() {
+    load(openComposerWhenReady) {
         this.isLoading = true;
         this.error = undefined;
-        draftEmail({ leadId: this.recordId })
+        draftEmail({ leadId: this._recordId })
             .then((r) => {
                 if (!r.ok) {
                     this.error = r.message;
@@ -30,6 +43,9 @@ export default class AiEmailDraft extends LightningElement {
                 this.email = r.email;
                 this.subject = r.subject;
                 this.body = r.text;
+                if (openComposerWhenReady) {
+                    this.openComposer();
+                }
             })
             .catch((e) => {
                 this.error = this.message(e);
@@ -40,7 +56,31 @@ export default class AiEmailDraft extends LightningElement {
     }
 
     handleRegenerate() {
-        this.load();
+        this.load(false);
+    }
+
+    handleOpenComposer() {
+        this.openComposer();
+    }
+
+    // Opens Salesforce's standard email composer with the AI draft already filled in.
+    openComposer() {
+        const html = this.escapeHtml(this.body).replace(/\r?\n/g, '<br>');
+        this[NavigationMixin.Navigate]({
+            type: 'standard__quickAction',
+            attributes: { apiName: 'Global.SendEmail' },
+            state: {
+                recordId: this._recordId,
+                defaultFieldValues: encodeDefaultFieldValues({
+                    Subject: this.subject,
+                    HtmlBody: html
+                })
+            }
+        });
+    }
+
+    escapeHtml(text) {
+        return (text || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     }
 
     handleCopy() {

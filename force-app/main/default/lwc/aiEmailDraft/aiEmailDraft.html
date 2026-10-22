@@ -27,11 +27,12 @@
                 </div>
                 <div class="paper">{body}</div>
             </div>
-            <p class="note">Written by AI as a starting point. Click <b>Copy email</b>, paste it into your own email, edit it as you like and send it yourself.</p>
+            <p class="note">Written by AI as a starting point. The standard email composer opens with this text filled in. Edit it as you like and press Send yourself. If it does not open, click <b>Open in Email Composer</b> or <b>Copy email</b>.</p>
         </template>
         <div slot="footer">
             <lightning-button variant="neutral" label="Close" onclick={handleClose}></lightning-button>
-            <lightning-button class="slds-m-left_x-small" variant="brand" icon-name="utility:copy" label="Copy email" disabled={isLoading} onclick={handleCopy}></lightning-button>
+            <lightning-button class="slds-m-left_x-small" variant="brand" icon-name="utility:email" label="Open in Email Composer" disabled={isLoading} onclick={handleOpenComposer}></lightning-button>
+            <lightning-button class="slds-m-left_x-small" variant="neutral" icon-name="utility:copy" label="Copy email" disabled={isLoading} onclick={handleCopy}></lightning-button>
             <lightning-button class="slds-m-left_x-small" variant="neutral" icon-name="utility:refresh" label="Regenerate" disabled={isLoading} onclick={handleRegenerate}></lightning-button>
         </div>
     </lightning-quick-action-panel>
