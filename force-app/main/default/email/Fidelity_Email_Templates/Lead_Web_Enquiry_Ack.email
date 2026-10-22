@@ -1,0 +1,12 @@
+Hi {!Lead.FirstName},
+
+Thank you for contacting Fidelity Healthcare Receivables Management. We have received your enquiry and a member of our team will be in touch with you shortly, usually within one business day.
+
+Here is what you sent us:
+{!Lead.Description}
+
+If you would like to add anything in the meantime, just reply to this email.
+
+Best regards,
+The Sales Team
+Fidelity Healthcare Receivables Management

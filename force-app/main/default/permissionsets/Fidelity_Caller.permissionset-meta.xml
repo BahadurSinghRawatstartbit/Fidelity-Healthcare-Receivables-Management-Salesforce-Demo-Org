@@ -7,6 +7,11 @@
     <description>Outbound calling team: works leads, logs calls and outcomes. Cannot see Opportunities or Accounts.</description>
     <fieldPermissions>
         <editable>true</editable>
+        <field>Lead.Meeting_Duration_Minutes__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>Call_Log__c.AI_Summary__c</field>
         <readable>true</readable>
     </fieldPermissions>

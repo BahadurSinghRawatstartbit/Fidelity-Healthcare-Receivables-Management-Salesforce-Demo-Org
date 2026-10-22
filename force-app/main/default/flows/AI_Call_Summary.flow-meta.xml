@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <environments>Default</environments>
+    <decisions>
+        <name>Enough_Notes</name>
+        <label>Enough Notes?</label>
+        <locationX>50</locationX>
+        <locationY>350</locationY>
+        <defaultConnector><targetReference>Save_Summary</targetReference></defaultConnector>
+        <defaultConnectorLabel>Summary ready</defaultConnectorLabel>
+        <rules>
+            <name>Not_Enough</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Generate_Summary.promptResponse</leftValueReference>
+                <operator>StartsWith</operator>
+                <rightValue><stringValue>Not enough information</stringValue></rightValue>
+            </conditions>
+            <connector><targetReference>Need_Notes_Screen</targetReference></connector>
+            <label>Not enough notes</label>
+        </rules>
+    </decisions>
+    <formulas>
+        <name>SummaryHtml</name>
+        <dataType>String</dataType>
+        <expression>SUBSTITUTE({!Generate_Summary.promptResponse}, BR(), &quot;&lt;br&gt;&quot;)</expression>
+    </formulas>
+    <interviewLabel>AI Call Summary {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>AI Call Summary</label>
+    <processType>Flow</processType>
+    <recordLookups>
+        <name>Get_Call_Log</name>
+        <label>Get Call Log</label>
+        <locationX>50</locationX>
+        <locationY>150</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector><targetReference>Generate_Summary</targetReference></connector>
+        <faultConnector><targetReference>Error_Screen</targetReference></faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value><elementReference>recordId</elementReference></value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Call_Log__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <actionCalls>
+        <name>Generate_Summary</name>
+        <label>Generate Summary</label>
+        <locationX>50</locationX>
+        <locationY>250</locationY>
+        <actionName>Fidelity_Call_Summary</actionName>
+        <actionType>generatePromptResponse</actionType>
+        <connector><targetReference>Enough_Notes</targetReference></connector>
+        <faultConnector><targetReference>Error_Screen</targetReference></faultConnector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>Input:Call_Log</name>
+            <value><elementReference>Get_Call_Log</elementReference></value>
+        </inputParameters>
+        <nameSegment>Fidelity_Call_Summary</nameSegment>
+        <offset>0</offset>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <recordUpdates>
+        <name>Save_Summary</name>
+        <label>Save Summary</label>
+        <locationX>50</locationX>
+        <locationY>600</locationY>
+        <connector><targetReference>Saved_Screen</targetReference></connector>
+        <faultConnector><targetReference>Error_Screen</targetReference></faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value><elementReference>recordId</elementReference></value>
+        </filters>
+        <inputAssignments>
+            <field>AI_Summary__c</field>
+            <value><elementReference>Generate_Summary.promptResponse</elementReference></value>
+        </inputAssignments>
+        <object>Call_Log__c</object>
+    </recordUpdates>
+    <screens>
+        <name>Need_Notes_Screen</name>
+        <label>Add call notes first</label>
+        <locationX>50</locationX>
+        <locationY>300</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>NeedNotes</name>
+            <fieldText>There is not enough in the call notes to summarise. Add notes to this call, then try again.</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>Saved_Screen</name>
+        <label>AI summary saved</label>
+        <locationX>50</locationX>
+        <locationY>700</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>Note</name>
+            <fieldText>AI suggestion. Please read it and use your own judgement. The AI never calls, sends or changes anything by itself. The summary below was saved in the AI Summary field of this call. Edit that field on the record if you want to change it.</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>SavedSummary</name>
+            <fieldText>&lt;p&gt;&lt;b&gt;Summary&lt;/b&gt;&lt;/p&gt;&lt;p&gt;{!SummaryHtml}&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>Error_Screen</name>
+        <label>Something went wrong</label>
+        <locationX>50</locationX>
+        <locationY>900</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>ErrMsg</name>
+            <fieldText>The AI assistant could not complete this request. Nothing has been changed. Please try again in a moment, or continue without AI.
+
+Details: {!$Flow.FaultMessage}</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector><targetReference>Get_Call_Log</targetReference></connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

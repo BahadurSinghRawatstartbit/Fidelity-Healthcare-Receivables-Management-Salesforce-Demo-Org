@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!-- Phase 3: the AI layer. Needs an org with Agentforce / Prompt Builder (GenAiPromptTemplate support).
+     Deploy AFTER phases 1 and 2. Do not deploy to an org without Agentforce - it will fail. -->
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>Fidelity_Call_Summary</members>
+        <members>Fidelity_Followup_Email_Draft</members>
+        <members>Fidelity_Lead_Brief</members>
+        <members>Fidelity_Lead_Next_Step</members>
+        <members>Fidelity_Opportunity_Brief</members>
+        <members>Fidelity_Opportunity_Next_Step</members>
+        <name>GenAiPromptTemplate</name>
+    </types>
+    <types>
+        <members>AI_Call_Summary</members>
+        <members>AI_Email_Draft</members>
+        <members>AI_Lead_Brief_Next_Step</members>
+        <members>AI_Opportunity_Brief_Next_Step</members>
+        <name>Flow</name>
+    </types>
+    <types>
+        <members>Call_Log__c.AI_Summarise</members>
+        <members>Lead.AI_Draft_Email</members>
+        <members>Lead.AI_Brief_Next_Step</members>
+        <members>Opportunity.AI_Brief_Next_Step</members>
+        <name>QuickAction</name>
+    </types>
+    <types>
+        <members>Lead-Lead Layout</members>
+        <members>Opportunity-Opportunity Layout</members>
+        <members>Call_Log__c-Call Log Layout</members>
+        <name>Layout</name>
+    </types>
+    <version>68.0</version>
+</Package>

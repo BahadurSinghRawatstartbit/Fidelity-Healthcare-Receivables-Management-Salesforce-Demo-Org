@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <environments>Default</environments>
+    <decisions>
+        <name>Has_Email</name>
+        <label>Lead Has Email?</label>
+        <locationX>50</locationX>
+        <locationY>250</locationY>
+        <defaultConnector><targetReference>No_Email_Screen</targetReference></defaultConnector>
+        <defaultConnectorLabel>No email</defaultConnectorLabel>
+        <rules>
+            <name>Email_Present</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Lead.Email</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue><booleanValue>false</booleanValue></rightValue>
+            </conditions>
+            <connector><targetReference>Get_Latest_Call</targetReference></connector>
+            <label>Email present</label>
+        </rules>
+    </decisions>
+    <formulas>
+        <name>CallSummaryText</name>
+        <dataType>String</dataType>
+        <expression>IF(ISBLANK({!Get_Latest_Call.AI_Summary__c}), IF(ISBLANK({!Get_Latest_Call.Call_Notes__c}), "None recorded.", {!Get_Latest_Call.Call_Notes__c}), {!Get_Latest_Call.AI_Summary__c})</expression>
+    </formulas>
+    <formulas>
+        <name>DraftHtml</name>
+        <dataType>String</dataType>
+        <expression>SUBSTITUTE({!Generate_Draft.promptResponse}, BR(), &quot;&lt;br&gt;&quot;)</expression>
+    </formulas>
+    <interviewLabel>AI Email Draft {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>AI Email Draft</label>
+    <processType>Flow</processType>
+    <recordLookups>
+        <name>Get_Lead</name>
+        <label>Get Lead</label>
+        <locationX>50</locationX>
+        <locationY>150</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector><targetReference>Has_Email</targetReference></connector>
+        <faultConnector><targetReference>Error_Screen</targetReference></faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value><elementReference>recordId</elementReference></value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Lead</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Latest_Call</name>
+        <label>Get Latest Call</label>
+        <locationX>50</locationX>
+        <locationY>350</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector><targetReference>Generate_Draft</targetReference></connector>
+        <faultConnector><targetReference>Error_Screen</targetReference></faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Lead__c</field>
+            <operator>EqualTo</operator>
+            <value><elementReference>recordId</elementReference></value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Call_Log__c</object>
+        <sortField>CreatedDate</sortField>
+        <sortOrder>Desc</sortOrder>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <actionCalls>
+        <name>Generate_Draft</name>
+        <label>Generate Draft</label>
+        <locationX>50</locationX>
+        <locationY>450</locationY>
+        <actionName>Fidelity_Followup_Email_Draft</actionName>
+        <actionType>generatePromptResponse</actionType>
+        <connector><targetReference>Review_Email</targetReference></connector>
+        <faultConnector><targetReference>Error_Screen</targetReference></faultConnector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>Input:Lead</name>
+            <value><elementReference>Get_Lead</elementReference></value>
+        </inputParameters>
+        <inputParameters>
+            <name>Input:LatestCallSummary</name>
+            <value><elementReference>CallSummaryText</elementReference></value>
+        </inputParameters>
+        <nameSegment>Fidelity_Followup_Email_Draft</nameSegment>
+        <offset>0</offset>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <screens>
+        <name>No_Email_Screen</name>
+        <label>No email address</label>
+        <locationX>50</locationX>
+        <locationY>350</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>NoMail</name>
+            <fieldText>This lead has no email address. Add one to the lead, then try again.</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>Review_Email</name>
+        <label>AI email draft</label>
+        <locationX>50</locationX>
+        <locationY>600</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>Note</name>
+            <fieldText>Written by AI as a starting point. NOTHING HAS BEEN SENT. Copy the text below into your own email to {!Get_Lead.Email}, edit it as you like, and send it yourself.</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>SubjectHint</name>
+            <fieldText>Suggested subject: Following up - Fidelity Healthcare Receivables Management</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>EmailDraft</name>
+            <fieldText>&lt;p&gt;&lt;b&gt;Email draft (select and copy)&lt;/b&gt;&lt;/p&gt;&lt;p&gt;{!DraftHtml}&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>Error_Screen</name>
+        <label>Something went wrong</label>
+        <locationX>50</locationX>
+        <locationY>900</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>ErrMsg</name>
+            <fieldText>The AI assistant could not complete this request. Nothing has been changed. Please try again in a moment, or continue without AI.
+
+Details: {!$Flow.FaultMessage}</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector><targetReference>Get_Lead</targetReference></connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

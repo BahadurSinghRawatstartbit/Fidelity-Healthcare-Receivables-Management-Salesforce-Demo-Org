@@ -10,12 +10,27 @@ export default class MeetingScheduler extends LightningElement {
 
     slots = [];
     selected;
+    duration = '30';
     isLoading = true;
     isSaving = false;
     error;
 
+    durationOptions = [
+        { label: '30 minutes', value: '30' },
+        { label: '45 minutes', value: '45' },
+        { label: '1 hour', value: '60' },
+        { label: '1 hour 30 minutes', value: '90' }
+    ];
+
     connectedCallback() {
-        getAvailableSlots({ leadId: this.recordId })
+        this.loadSlots();
+    }
+
+    loadSlots() {
+        this.isLoading = true;
+        this.error = undefined;
+        this.selected = undefined;
+        getAvailableSlots({ leadId: this.recordId, durationMinutes: parseInt(this.duration, 10) })
             .then((result) => {
                 this.slots = result;
             })
@@ -50,13 +65,22 @@ export default class MeetingScheduler extends LightningElement {
         return !this.selected || this.isSaving;
     }
 
+    handleDuration(event) {
+        this.duration = event.detail.value;
+        this.loadSlots();
+    }
+
     handleSelect(event) {
         this.selected = event.target.dataset.value;
     }
 
     handleSchedule() {
         this.isSaving = true;
-        scheduleMeeting({ leadId: this.recordId, slot: this.selected })
+        scheduleMeeting({
+            leadId: this.recordId,
+            slot: this.selected,
+            durationMinutes: parseInt(this.duration, 10)
+        })
             .then(() => notifyRecordUpdateAvailable([{ recordId: this.recordId }]))
             .then(() => {
                 this.dispatchEvent(

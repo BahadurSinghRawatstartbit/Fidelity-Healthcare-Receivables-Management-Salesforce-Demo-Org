@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <environments>Default</environments>
+    <formulas>
+        <name>BriefHtml</name>
+        <dataType>String</dataType>
+        <expression>SUBSTITUTE({!Generate_Brief.promptResponse}, BR(), &quot;&lt;br&gt;&quot;)</expression>
+    </formulas>
+    <formulas>
+        <name>NextHtml</name>
+        <dataType>String</dataType>
+        <expression>SUBSTITUTE({!Generate_Next_Step.promptResponse}, BR(), &quot;&lt;br&gt;&quot;)</expression>
+    </formulas>
+    <interviewLabel>AI Opportunity Brief and Next Step {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>AI Opportunity Brief and Next Step</label>
+    <processType>Flow</processType>
+    <recordLookups>
+        <name>Get_Opportunity</name>
+        <label>Get Opportunity</label>
+        <locationX>50</locationX>
+        <locationY>150</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector><targetReference>Generate_Brief</targetReference></connector>
+        <faultConnector><targetReference>Error_Screen</targetReference></faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value><elementReference>recordId</elementReference></value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Opportunity</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <actionCalls>
+        <name>Generate_Brief</name>
+        <label>Generate Brief</label>
+        <locationX>50</locationX>
+        <locationY>250</locationY>
+        <actionName>Fidelity_Opportunity_Brief</actionName>
+        <actionType>generatePromptResponse</actionType>
+        <connector><targetReference>Generate_Next_Step</targetReference></connector>
+        <faultConnector><targetReference>Error_Screen</targetReference></faultConnector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>Input:Opportunity</name>
+            <value><elementReference>Get_Opportunity</elementReference></value>
+        </inputParameters>
+        <nameSegment>Fidelity_Opportunity_Brief</nameSegment>
+        <offset>0</offset>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <actionCalls>
+        <name>Generate_Next_Step</name>
+        <label>Generate Next Step</label>
+        <locationX>50</locationX>
+        <locationY>350</locationY>
+        <actionName>Fidelity_Opportunity_Next_Step</actionName>
+        <actionType>generatePromptResponse</actionType>
+        <connector><targetReference>Show_Result</targetReference></connector>
+        <faultConnector><targetReference>Error_Screen</targetReference></faultConnector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>Input:Opportunity</name>
+            <value><elementReference>Get_Opportunity</elementReference></value>
+        </inputParameters>
+        <nameSegment>Fidelity_Opportunity_Next_Step</nameSegment>
+        <offset>0</offset>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <screens>
+        <name>Show_Result</name>
+        <label>AI brief and next step</label>
+        <locationX>50</locationX>
+        <locationY>450</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>Note</name>
+            <fieldText>AI suggestion. Please read it and use your own judgement. The AI never calls, sends or changes anything by itself.</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>Brief</name>
+            <fieldText>&lt;p&gt;&lt;b&gt;Deal brief&lt;/b&gt;&lt;/p&gt;&lt;p&gt;{!BriefHtml}&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>NextStep</name>
+            <fieldText>&lt;p&gt;&lt;b&gt;Suggested next step&lt;/b&gt;&lt;/p&gt;&lt;p&gt;{!NextHtml}&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>Error_Screen</name>
+        <label>Something went wrong</label>
+        <locationX>50</locationX>
+        <locationY>900</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>ErrMsg</name>
+            <fieldText>The AI assistant could not complete this request. Nothing has been changed. Please try again in a moment, or continue without AI.
+
+Details: {!$Flow.FaultMessage}</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector><targetReference>Get_Opportunity</targetReference></connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

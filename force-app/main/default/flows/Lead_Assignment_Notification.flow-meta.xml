@@ -33,27 +33,37 @@
         </inputParameters>
     </actionCalls>
     <assignments>
-        <name>Add_Owner_To_Recipients</name>
-        <label>Add Owner To Recipients</label>
-        <locationX>50</locationX>
-        <locationY>242</locationY>
+        <name>Add_Member</name>
+        <label>Add Member</label>
+        <locationX>300</locationX>
+        <locationY>650</locationY>
         <assignmentItems>
             <assignToReference>RecipientIds</assignToReference>
             <operator>Add</operator>
-            <value><elementReference>$Record.OwnerId</elementReference></value>
+            <value><elementReference>Loop_Members.UserOrGroupId</elementReference></value>
         </assignmentItems>
-        <connector><targetReference>Send_Lead_Assigned_Notification</targetReference></connector>
+        <connector><targetReference>Loop_Members</targetReference></connector>
     </assignments>
     <interviewLabel>Lead Assignment Notification {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Lead Assignment Notification</label>
     <processType>AutoLaunchedFlow</processType>
+    <loops>
+        <name>Loop_Members</name>
+        <label>Loop Members</label>
+        <locationX>50</locationX>
+        <locationY>650</locationY>
+        <collectionReference>Get_Queue_Members</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector><targetReference>Add_Member</targetReference></nextValueConnector>
+        <noMoreValuesConnector><targetReference>Send_Lead_Assigned_Notification</targetReference></noMoreValuesConnector>
+    </loops>
     <recordLookups>
         <name>Get_Notification_Type</name>
         <label>Get Notification Type</label>
         <locationX>50</locationX>
         <locationY>134</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector><targetReference>Add_Owner_To_Recipients</targetReference></connector>
+        <connector><targetReference>Get_Queue_Members</targetReference></connector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>DeveloperName</field>
@@ -64,10 +74,29 @@
         <object>CustomNotificationType</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
+    <recordLookups>
+        <name>Get_Queue_Members</name>
+        <label>Get Queue Members</label>
+        <locationX>50</locationX>
+        <locationY>600</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector><targetReference>Loop_Members</targetReference></connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>GroupId</field>
+            <operator>EqualTo</operator>
+            <value><elementReference>$Record.OwnerId</elementReference></value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>GroupMember</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
     <start>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector><targetReference>Get_Notification_Type</targetReference></connector>
+        <filterFormula>LEFT({!$Record.OwnerId}, 3) = "00G"</filterFormula>
+        <filterLogic>formula_evaluates_to_true</filterLogic>
         <object>Lead</object>
         <recordTriggerType>Create</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>

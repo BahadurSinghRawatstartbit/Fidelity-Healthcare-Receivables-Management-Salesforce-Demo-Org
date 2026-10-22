@@ -1,0 +1,47 @@
+<template>
+    <lightning-quick-action-panel header="AI Brief and Next Step">
+        <template lwc:if={isLoading}>
+            <div class="loading">
+                <div class="spin"></div>
+                <div class="big">Preparing your brief...</div>
+                <div>This takes a few seconds.</div>
+            </div>
+        </template>
+        <template lwc:elseif={error}>
+            <div class="error"><b>Sorry, this did not work.</b><br>{error}</div>
+        </template>
+        <template lwc:else>
+            <div class="hero">
+                <div class="hero-icon">&#10024;</div>
+                <div>
+                    <div class="hero-title">{heading}</div>
+                    <div class="hero-sub">{title}</div>
+                </div>
+                <div class="badge">AI suggestion &middot; you decide</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Brief</div>
+                <template for:each={briefRows} for:item="row">
+                    <div key={row.key} class="row">
+                        <div class="label">{row.label}</div>
+                        <div class="value">{row.value}</div>
+                    </div>
+                </template>
+            </div>
+
+            <div class="next">
+                <div class="next-title">Suggested next step</div>
+                <div class="next-main">{next.main}</div>
+                <template lwc:if={next.why}>
+                    <div class="next-why"><b>Why:</b> {next.why}</div>
+                </template>
+            </div>
+            <p class="note">The AI only suggests. It never calls, sends or changes anything. Please use your own judgement.</p>
+        </template>
+        <div slot="footer">
+            <lightning-button variant="neutral" label="Close" onclick={handleClose}></lightning-button>
+            <lightning-button class="slds-m-left_x-small" variant="neutral" icon-name="utility:refresh" label="Regenerate" disabled={isLoading} onclick={handleRegenerate}></lightning-button>
+        </div>
+    </lightning-quick-action-panel>
+</template>

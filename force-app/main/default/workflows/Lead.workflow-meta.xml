@@ -50,4 +50,15 @@
         <senderType>CurrentUser</senderType>
         <template>Fidelity_Email_Templates/Lead_No_Response_Email</template>
     </alerts>
+    <alerts>
+        <fullName>Lead_Web_Enquiry_Ack</fullName>
+        <description>Lead Web Enquiry Acknowledgement</description>
+        <protected>false</protected>
+        <recipients>
+            <field>Email</field>
+            <type>email</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>Fidelity_Email_Templates/Lead_Web_Enquiry_Ack</template>
+    </alerts>
 </Workflow>

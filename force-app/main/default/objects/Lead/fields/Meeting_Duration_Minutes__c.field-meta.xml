@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Meeting_Duration_Minutes__c</fullName>
+    <defaultValue>30</defaultValue>
+    <description>Length of the discovery meeting in minutes. Set by the Schedule Meeting button; used for the calendar event.</description>
+    <externalId>false</externalId>
+    <label>Meeting Duration (minutes)</label>
+    <precision>3</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

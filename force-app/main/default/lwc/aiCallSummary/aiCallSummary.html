@@ -1,0 +1,35 @@
+<template>
+    <lightning-quick-action-panel header="Summarise with AI">
+        <template lwc:if={isLoading}>
+            <div class="loading">
+                <div class="spin"></div>
+                <div class="big">Summarising the call...</div>
+                <div>This takes a few seconds.</div>
+            </div>
+        </template>
+        <template lwc:elseif={error}>
+            <div class="error"><b>Sorry, this did not work.</b><br>{error}</div>
+        </template>
+        <template lwc:else>
+            <div class="hero">
+                <div class="hero-icon">&#128222;</div>
+                <div>
+                    <div class="hero-title">Call summary</div>
+                    <div class="hero-sub">{title}</div>
+                </div>
+                <div class="badge">AI suggestion &middot; you decide</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Summary</div>
+                <div class="summary">{summary}</div>
+                <div class="saved">&#10003; Saved in the AI Summary field of this call</div>
+            </div>
+            <p class="note">You can edit the AI Summary field on the call record at any time. The AI only summarises what the caller wrote.</p>
+        </template>
+        <div slot="footer">
+            <lightning-button variant="neutral" label="Close" onclick={handleClose}></lightning-button>
+            <lightning-button class="slds-m-left_x-small" variant="neutral" icon-name="utility:refresh" label="Regenerate" disabled={isLoading} onclick={handleRegenerate}></lightning-button>
+        </div>
+    </lightning-quick-action-panel>
+</template>

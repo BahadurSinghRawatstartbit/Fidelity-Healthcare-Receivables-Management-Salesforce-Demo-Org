@@ -1,5 +1,13 @@
 <template>
     <lightning-quick-action-panel header="Schedule Discovery Meeting">
+        <lightning-combobox
+            name="duration"
+            label="Meeting length"
+            value={duration}
+            options={durationOptions}
+            onchange={handleDuration}
+            class="slds-m-bottom_small">
+        </lightning-combobox>
         <template lwc:if={isLoading}>
             <lightning-spinner alternative-text="Loading available times" size="medium"></lightning-spinner>
         </template>
@@ -27,7 +35,7 @@
             </template>
         </template>
         <template lwc:else>
-            <p>No free times were found in the next five business days.</p>
+            <p>No free times of this length were found in the next five business days.</p>
         </template>
         <div slot="footer">
             <lightning-button variant="neutral" label="Cancel" onclick={handleCancel}></lightning-button>

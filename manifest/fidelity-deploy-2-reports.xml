@@ -18,6 +18,11 @@
         <members>Fidelity_Sales_Reports/Activities_by_Type</members>
         <members>Fidelity_Sales_Reports/Open_Follow_Up_Tasks</members>
         <members>Fidelity_Sales_Reports/Calls_by_Outcome</members>
+        <members>Fidelity_Sales_Reports/Leads_by_Owner</members>
+        <members>Fidelity_Sales_Reports/Converted_Leads_by_Source</members>
+        <members>Fidelity_Sales_Reports/New_Leads_This_Month</members>
+        <members>Fidelity_Sales_Reports/Open_Opportunities_by_Owner</members>
+        <members>Fidelity_Sales_Reports/Calls_by_Type</members>
         <name>Report</name>
     </types>
     <types><members>Fidelity_Dashboards</members><name>DashboardFolder</name></types>

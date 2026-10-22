@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <environments>Default</environments>
+    <actionCalls>
+        <name>Send_Enquiry_Email</name>
+        <label>Send Enquiry Thank-You Email</label>
+        <locationX>50</locationX>
+        <locationY>200</locationY>
+        <actionName>Lead.Lead_Web_Enquiry_Ack</actionName>
+        <actionType>emailAlert</actionType>
+        <connector><targetReference>Log_Email_Sent</targetReference></connector>
+        <faultConnector><targetReference>Log_Email_Failed</targetReference></faultConnector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value><elementReference>$Record.Id</elementReference></value>
+        </inputParameters>
+        <nameSegment>Lead.Lead_Web_Enquiry_Ack</nameSegment>
+    </actionCalls>
+    <interviewLabel>Lead Web Enquiry Acknowledgement {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Lead Web Enquiry Acknowledgement</label>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <name>Log_Email_Sent</name>
+        <label>Log Email Sent</label>
+        <locationX>50</locationX>
+        <locationY>350</locationY>
+        <inputAssignments>
+            <field>ActivityDate</field>
+            <value><elementReference>$Flow.CurrentDate</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Description</field>
+            <value><stringValue>Automatic thank-you email was handed to the mail system for the address on this lead. If the doctor does not see it, ask them to check spam.</stringValue></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value><elementReference>$User.Id</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Priority</field>
+            <value><stringValue>Normal</stringValue></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value><stringValue>Completed</stringValue></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value><stringValue>Email sent: thank you for your enquiry</stringValue></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhoId</field>
+            <value><elementReference>$Record.Id</elementReference></value>
+        </inputAssignments>
+        <object>Task</object>
+    </recordCreates>
+    <recordCreates>
+        <name>Log_Email_Failed</name>
+        <label>Log Email Failed</label>
+        <locationX>50</locationX>
+        <locationY>450</locationY>
+        <inputAssignments>
+            <field>ActivityDate</field>
+            <value><elementReference>$Flow.CurrentDate</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Description</field>
+            <value><stringValue>The automatic thank-you email could not be sent (for example the daily email limit was reached or the address is invalid). Please contact the doctor yourself.</stringValue></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value><elementReference>$User.Id</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Priority</field>
+            <value><stringValue>Normal</stringValue></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value><stringValue>Completed</stringValue></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value><stringValue>Email NOT sent: thank-you email failed</stringValue></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhoId</field>
+            <value><elementReference>$Record.Id</elementReference></value>
+        </inputAssignments>
+        <object>Task</object>
+    </recordCreates>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector><targetReference>Send_Enquiry_Email</targetReference></connector>
+        <filterFormula>AND(NOT(ISBLANK({!$Record.Email})), OR(TEXT({!$Record.LeadSource}) = "Google Campaign", TEXT({!$Record.LeadSource}) = "Landing Page"))</filterFormula>
+        <filterLogic>formula_evaluates_to_true</filterLogic>
+        <object>Lead</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>SkipNote</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

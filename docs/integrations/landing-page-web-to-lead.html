@@ -3,61 +3,164 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Fidelity Healthcare Receivables Management - Request a Consultation</title>
+  <title>Fidelity Healthcare Receivables Management | Request a Consultation</title>
+  <!--
+    HOW THIS WORKS
+    Submitting the form creates a Lead in Salesforce (Web-to-Lead). The Lead Source is set to "Google Campaign",
+    the lead is routed to the right queue, and the doctor receives a thank-you email.
+    The page stays open and shows a thank-you pop-up (no redirect).
+
+    ONE-TIME SETUP in Salesforce: Setup > Web-to-Lead > tick "Enable Web-to-Lead".
+    The org id below (oid) belongs to the Salesforce org that receives the leads.
+
+    Do not collect patient or health information on this form. Business contact details only.
+  -->
   <style>
-    body { font-family: Arial, sans-serif; background: #f4f6f9; margin: 0; padding: 24px; color: #1b2733; }
-    form { max-width: 460px; margin: 0 auto; background: #fff; padding: 28px; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,.15); }
-    h1 { font-size: 20px; margin: 0 0 4px; }
-    p.sub { margin: 0 0 20px; color: #5b6b7b; font-size: 14px; }
-    label { display: block; font-size: 13px; margin: 14px 0 4px; }
-    input, textarea { width: 100%; box-sizing: border-box; padding: 9px; border: 1px solid #c3ccd6; border-radius: 4px; font-size: 14px; }
-    button { margin-top: 20px; width: 100%; padding: 11px; background: #0b5cab; color: #fff; border: 0; border-radius: 4px; font-size: 15px; cursor: pointer; }
-    .note { font-size: 11px; color: #7a8896; margin-top: 14px; }
+    :root { --navy:#0b2a4a; --teal:#0e8f8a; --teal-dark:#0a6f6b; --ink:#1c2b3a; --muted:#5f7183; --line:#d9e2ea; --bg:#f3f7fa; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: "Segoe UI", Roboto, Arial, sans-serif; color:var(--ink); background:var(--bg); }
+    header { background:var(--navy); color:#fff; padding:16px 32px; display:flex; align-items:center; gap:12px; }
+    .logo { width:36px; height:36px; border-radius:8px; background:var(--teal); display:grid; place-items:center; font-weight:700; }
+    header strong { font-size:17px; letter-spacing:.2px; }
+    header span { font-size:12px; opacity:.75; display:block; }
+    main { max-width:1080px; margin:0 auto; padding:48px 24px; display:grid; grid-template-columns: 1.1fr 1fr; gap:48px; align-items:start; }
+    .intro h1 { font-size:34px; line-height:1.2; margin:0 0 16px; color:var(--navy); }
+    .intro p.lead { font-size:17px; color:var(--muted); line-height:1.6; margin:0 0 28px; }
+    .points { list-style:none; padding:0; margin:0 0 28px; }
+    .points li { display:flex; gap:12px; margin-bottom:16px; line-height:1.5; }
+    .points .tick { flex:0 0 24px; height:24px; border-radius:50%; background:#dff3f2; color:var(--teal-dark); display:grid; place-items:center; font-size:14px; font-weight:700; margin-top:2px; }
+    .points b { display:block; color:var(--navy); }
+    .points span { color:var(--muted); font-size:14px; }
+    .trust { font-size:13px; color:var(--muted); border-top:1px solid var(--line); padding-top:16px; }
+    .card { background:#fff; border:1px solid var(--line); border-radius:14px; padding:32px; box-shadow:0 10px 30px rgba(11,42,74,.08); }
+    .card h2 { margin:0 0 4px; font-size:22px; color:var(--navy); }
+    .card p.sub { margin:0 0 20px; color:var(--muted); font-size:14px; }
+    .row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    label { display:block; font-size:13px; font-weight:600; margin:14px 0 6px; color:var(--ink); }
+    input, textarea { width:100%; padding:11px 12px; border:1px solid #c5d1db; border-radius:8px; font:inherit; font-size:15px; background:#fff; }
+    input:focus, textarea:focus { outline:none; border-color:var(--teal); box-shadow:0 0 0 3px rgba(14,143,138,.15); }
+    textarea { min-height:110px; resize:vertical; }
+    button.submit { margin-top:22px; width:100%; padding:13px; background:var(--teal); color:#fff; border:0; border-radius:8px; font-size:16px; font-weight:600; cursor:pointer; transition:background .15s; }
+    button.submit:hover { background:var(--teal-dark); }
+    button.submit:disabled { opacity:.7; cursor:wait; }
+    .fine { font-size:12px; color:var(--muted); margin-top:14px; line-height:1.5; }
+    footer { text-align:center; font-size:12px; color:var(--muted); padding:24px; }
+    /* thank-you pop-up */
+    .overlay { position:fixed; inset:0; background:rgba(11,42,74,.55); display:none; align-items:center; justify-content:center; padding:20px; z-index:10; }
+    .overlay.show { display:flex; }
+    .modal { background:#fff; border-radius:16px; max-width:440px; width:100%; padding:36px 32px; text-align:center; box-shadow:0 20px 50px rgba(0,0,0,.3); animation:pop .25s ease; }
+    @keyframes pop { from { transform:scale(.92); opacity:0; } to { transform:scale(1); opacity:1; } }
+    .modal .check { width:64px; height:64px; border-radius:50%; background:#dff3f2; color:var(--teal-dark); display:grid; place-items:center; font-size:34px; margin:0 auto 18px; }
+    .modal h3 { margin:0 0 10px; font-size:24px; color:var(--navy); }
+    .modal p { margin:0 0 22px; color:var(--muted); line-height:1.6; }
+    .modal button { background:var(--navy); color:#fff; border:0; border-radius:8px; padding:11px 28px; font-size:15px; font-weight:600; cursor:pointer; }
+    @media (max-width: 860px) { main { grid-template-columns:1fr; gap:32px; padding:28px 18px; } .intro h1 { font-size:27px; } .row { grid-template-columns:1fr; } }
   </style>
 </head>
 <body>
-  <!--
-    HOW THIS WORKS
-    This posts straight into the Salesforce org as a new Lead. No code or login is needed on the page.
-    The Lead Assignment flow then routes it to the right queue and the assignment notification fires.
+  <header>
+    <div class="logo">F</div>
+    <div><strong>Fidelity Healthcare Receivables Management</strong><span>Revenue recovery for medical practices</span></div>
+  </header>
 
-    BEFORE IT WORKS (one-time, in Salesforce Setup):
-      1. Setup > Web-to-Lead > "Enable Web-to-Lead" (tick it, save).
-      2. Setup > Web-to-Lead > Create Web-to-Lead Form is optional - this file already contains the form.
+  <main>
+    <section class="intro">
+      <h1>Spend your time on patients, not on unpaid claims.</h1>
+      <p class="lead">We help physicians and medical practices recover the revenue they have already earned, with a dedicated team that follows up on claims so your staff does not have to.</p>
+      <ul class="points">
+        <li><div class="tick">&#10003;</div><div><b>Faster payments</b><span>Persistent, professional follow-up on outstanding claims and balances.</span></div></li>
+        <li><div class="tick">&#10003;</div><div><b>Less work for your team</b><span>Your front desk and billing staff get their time back.</span></div></li>
+        <li><div class="tick">&#10003;</div><div><b>A personal approach</b><span>A real person reviews your enquiry and contacts you directly. No call centre scripts.</span></div></li>
+      </ul>
+      <div class="trust">Serving medical practices across the United States.</div>
+    </section>
 
-    FIELD NOTES
-      oid         = the org id (already filled in below)
-      lead_source = hidden, so every submission is tagged "Google Campaign"
-      retURL      = where the visitor lands after submitting (replace with your thank-you page)
+    <section class="card">
+      <h2>Request a consultation</h2>
+      <p class="sub">Tell us a little about your needs. We usually reply within one business day.</p>
 
-    SECURITY NOTE: Web-to-Lead is public and unauthenticated. Do not collect health or patient
-    information through this form - only business contact details.
-  -->
-  <form action="https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8" method="POST">
-    <input type="hidden" name="oid" value="00Dg800000OSUIHEA5">
-    <input type="hidden" name="retURL" value="https://www.example.com/thank-you">
-    <input type="hidden" name="lead_source" value="Google Campaign">
+      <form id="enquiry" action="https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8" method="POST" target="hidden_frame">
+        <input type="hidden" name="oid" value="00DjV000006VYGT">
+        <input type="hidden" name="lead_source" value="Google Campaign">
+        <input type="hidden" name="company" id="company" value="">
 
-    <h1>Request a consultation</h1>
-    <p class="sub">Tell us about your practice and we will be in touch.</p>
+        <div class="row">
+          <div>
+            <label for="first_name">First name</label>
+            <input id="first_name" name="first_name" maxlength="40" type="text" autocomplete="given-name" required>
+          </div>
+          <div>
+            <label for="last_name">Last name</label>
+            <input id="last_name" name="last_name" maxlength="80" type="text" autocomplete="family-name" required>
+          </div>
+        </div>
 
-    <label for="first_name">First name</label>
-    <input id="first_name" name="first_name" maxlength="40" type="text" required>
+        <label for="email">Work email</label>
+        <input id="email" name="email" maxlength="80" type="email" autocomplete="email" required>
 
-    <label for="last_name">Last name</label>
-    <input id="last_name" name="last_name" maxlength="80" type="text" required>
+        <label for="phone">Phone</label>
+        <input id="phone" name="phone" maxlength="40" type="tel" autocomplete="tel">
 
-    <label for="company">Practice name</label>
-    <input id="company" name="company" maxlength="40" type="text" required>
+        <label for="description">How can we help?</label>
+        <textarea id="description" name="description" maxlength="2000" placeholder="For example: we would like help following up on unpaid insurance claims."></textarea>
 
-    <label for="email">Email</label>
-    <input id="email" name="email" maxlength="80" type="email" required>
+        <button class="submit" id="submitBtn" type="submit">Request consultation</button>
+        <p class="fine">Please do not include patient or health information. We only use these details to respond to your enquiry.</p>
+      </form>
+    </section>
+  </main>
 
-    <label for="phone">Phone</label>
-    <input id="phone" name="phone" maxlength="40" type="tel">
+  <footer>&copy; Fidelity Healthcare Receivables Management</footer>
 
-    <button type="submit">Request consultation</button>
-    <p class="note">We only use these details to contact you about our services.</p>
-  </form>
+  <!-- the form posts into this hidden frame so the visitor stays on this page -->
+  <iframe name="hidden_frame" id="hidden_frame" style="display:none" title="submission"></iframe>
+
+  <div class="overlay" id="thanks" role="dialog" aria-modal="true" aria-labelledby="thanksTitle">
+    <div class="modal">
+      <div class="check">&#10003;</div>
+      <h3 id="thanksTitle">Thank you<span id="thanksName"></span></h3>
+      <p>We have received your enquiry. A member of our team will contact you shortly, usually within one business day. A confirmation has also been sent to your email.</p>
+      <button type="button" id="closeBtn">Close</button>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var form = document.getElementById('enquiry');
+      var btn = document.getElementById('submitBtn');
+      var overlay = document.getElementById('thanks');
+      var shown = false;
+
+      function showThanks() {
+        if (shown) return;
+        shown = true;
+        var first = document.getElementById('first_name').value.trim();
+        document.getElementById('thanksName').textContent = first ? ', Dr. ' + document.getElementById('last_name').value.trim() : '';
+        overlay.classList.add('show');
+        form.reset();
+        btn.disabled = false;
+        btn.textContent = 'Request consultation';
+      }
+
+      form.addEventListener('submit', function () {
+        // Salesforce requires a company on every lead; build one from the name instead of asking a doctor for it.
+        var last = document.getElementById('last_name').value.trim();
+        document.getElementById('company').value = 'Dr. ' + last + ' (Web enquiry)';
+        shown = false;
+        btn.disabled = true;
+        btn.textContent = 'Sending...';
+        // show the pop-up once the hidden frame has loaded, with a fallback in case it does not report back
+        setTimeout(showThanks, 2500);
+      });
+      document.getElementById('hidden_frame').addEventListener('load', function () {
+        if (btn.disabled) showThanks();
+      });
+
+      function close() { overlay.classList.remove('show'); }
+      document.getElementById('closeBtn').addEventListener('click', close);
+      overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+    })();
+  </script>
 </body>
 </html>

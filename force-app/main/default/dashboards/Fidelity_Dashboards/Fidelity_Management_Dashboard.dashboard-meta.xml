@@ -16,8 +16,8 @@
             <chartAxisRange>Auto</chartAxisRange>
             <componentType>Column</componentType>
             <displayUnits>Auto</displayUnits>
-            <drillEnabled>false</drillEnabled>
-            <drillToDetailEnabled>false</drillToDetailEnabled>
+            <drillEnabled>true</drillEnabled>
+            <drillToDetailEnabled>true</drillToDetailEnabled>
             <enableHover>true</enableHover>
             <header>Leads by Status</header>
             <legendPosition>Bottom</legendPosition>
@@ -32,8 +32,8 @@
             <chartAxisRange>Auto</chartAxisRange>
             <componentType>Donut</componentType>
             <displayUnits>Auto</displayUnits>
-            <drillEnabled>false</drillEnabled>
-            <drillToDetailEnabled>false</drillToDetailEnabled>
+            <drillEnabled>true</drillEnabled>
+            <drillToDetailEnabled>true</drillToDetailEnabled>
             <enableHover>true</enableHover>
             <header>Leads by Source</header>
             <legendPosition>Bottom</legendPosition>
@@ -45,31 +45,52 @@
             <useReportChart>true</useReportChart>
         </components>
         <components>
-            <componentType>Table</componentType>
-            <dashboardTableColumn>
-                <column>Lead$FirstName</column>
-                <sortBy>RowLabelAscending</sortBy>
-            </dashboardTableColumn>
-            <dashboardTableColumn>
-                <column>Lead$LastName</column>
-            </dashboardTableColumn>
-            <dashboardTableColumn>
-                <column>Lead$Company</column>
-            </dashboardTableColumn>
+            <chartAxisRange>Auto</chartAxisRange>
+            <componentType>Column</componentType>
             <displayUnits>Auto</displayUnits>
-            <drillEnabled>false</drillEnabled>
-            <drillToDetailEnabled>false</drillToDetailEnabled>
-            <enableHover>false</enableHover>
+            <drillEnabled>true</drillEnabled>
+            <drillToDetailEnabled>true</drillToDetailEnabled>
+            <enableHover>true</enableHover>
+            <header>New Leads This Month</header>
+            <legendPosition>Bottom</legendPosition>
+            <report>Fidelity_Sales_Reports/New_Leads_This_Month</report>
+            <showPercentage>false</showPercentage>
+            <showValues>true</showValues>
+            <sortBy>RowLabelAscending</sortBy>
+            <title>New Leads This Month</title>
+            <useReportChart>true</useReportChart>
+        </components>
+        <components>
+            <chartAxisRange>Auto</chartAxisRange>
+            <componentType>Bar</componentType>
+            <displayUnits>Auto</displayUnits>
+            <drillEnabled>true</drillEnabled>
+            <drillToDetailEnabled>true</drillToDetailEnabled>
+            <enableHover>true</enableHover>
+            <header>Leads by Owner or Queue</header>
+            <legendPosition>Bottom</legendPosition>
+            <report>Fidelity_Sales_Reports/Leads_by_Owner</report>
+            <showPercentage>false</showPercentage>
+            <showValues>true</showValues>
+            <sortBy>RowLabelAscending</sortBy>
+            <title>Leads by Owner or Queue</title>
+            <useReportChart>true</useReportChart>
+        </components>
+        <components>
+            <chartAxisRange>Auto</chartAxisRange>
+            <componentType>Bar</componentType>
+            <displayUnits>Auto</displayUnits>
+            <drillEnabled>true</drillEnabled>
+            <drillToDetailEnabled>true</drillToDetailEnabled>
+            <enableHover>true</enableHover>
             <header>Leads Needing Follow-up</header>
-            <indicatorBreakpoint1>0.0</indicatorBreakpoint1>
-            <indicatorBreakpoint2>0.0</indicatorBreakpoint2>
-            <indicatorHighColor>#54C254</indicatorHighColor>
-            <indicatorLowColor>#C25454</indicatorLowColor>
-            <indicatorMiddleColor>#C2C254</indicatorMiddleColor>
+            <legendPosition>Bottom</legendPosition>
             <report>Fidelity_Sales_Reports/Leads_Needing_Follow_Up</report>
-            <showPicturesOnTables>false</showPicturesOnTables>
+            <showPercentage>false</showPercentage>
+            <showValues>true</showValues>
+            <sortBy>RowLabelAscending</sortBy>
             <title>Leads Needing Follow-up</title>
-            <useReportChart>false</useReportChart>
+            <useReportChart>true</useReportChart>
         </components>
     </leftSection>
     <middleSection>
@@ -78,8 +99,8 @@
             <chartAxisRange>Auto</chartAxisRange>
             <componentType>Funnel</componentType>
             <displayUnits>Auto</displayUnits>
-            <drillEnabled>false</drillEnabled>
-            <drillToDetailEnabled>false</drillToDetailEnabled>
+            <drillEnabled>true</drillEnabled>
+            <drillToDetailEnabled>true</drillToDetailEnabled>
             <enableHover>true</enableHover>
             <header>Pipeline by Stage</header>
             <legendPosition>Bottom</legendPosition>
@@ -94,8 +115,40 @@
             <chartAxisRange>Auto</chartAxisRange>
             <componentType>Donut</componentType>
             <displayUnits>Auto</displayUnits>
-            <drillEnabled>false</drillEnabled>
-            <drillToDetailEnabled>false</drillToDetailEnabled>
+            <drillEnabled>true</drillEnabled>
+            <drillToDetailEnabled>true</drillToDetailEnabled>
+            <enableHover>true</enableHover>
+            <header>Converted Leads by Source</header>
+            <legendPosition>Bottom</legendPosition>
+            <report>Fidelity_Sales_Reports/Converted_Leads_by_Source</report>
+            <showPercentage>false</showPercentage>
+            <showValues>true</showValues>
+            <sortBy>RowLabelAscending</sortBy>
+            <title>Converted Leads by Source</title>
+            <useReportChart>true</useReportChart>
+        </components>
+        <components>
+            <chartAxisRange>Auto</chartAxisRange>
+            <componentType>Bar</componentType>
+            <displayUnits>Auto</displayUnits>
+            <drillEnabled>true</drillEnabled>
+            <drillToDetailEnabled>true</drillToDetailEnabled>
+            <enableHover>true</enableHover>
+            <header>Open Opportunities by Owner</header>
+            <legendPosition>Bottom</legendPosition>
+            <report>Fidelity_Sales_Reports/Open_Opportunities_by_Owner</report>
+            <showPercentage>false</showPercentage>
+            <showValues>true</showValues>
+            <sortBy>RowLabelAscending</sortBy>
+            <title>Open Opportunities by Owner</title>
+            <useReportChart>true</useReportChart>
+        </components>
+        <components>
+            <chartAxisRange>Auto</chartAxisRange>
+            <componentType>Donut</componentType>
+            <displayUnits>Auto</displayUnits>
+            <drillEnabled>true</drillEnabled>
+            <drillToDetailEnabled>true</drillToDetailEnabled>
             <enableHover>true</enableHover>
             <header>Closed Won vs Lost</header>
             <legendPosition>Bottom</legendPosition>
@@ -107,31 +160,20 @@
             <useReportChart>true</useReportChart>
         </components>
         <components>
-            <componentType>Table</componentType>
-            <dashboardTableColumn>
-                <column>OPPORTUNITY_NAME</column>
-                <sortBy>RowLabelAscending</sortBy>
-            </dashboardTableColumn>
-            <dashboardTableColumn>
-                <column>ACCOUNT_NAME</column>
-            </dashboardTableColumn>
-            <dashboardTableColumn>
-                <column>STAGE_NAME</column>
-            </dashboardTableColumn>
+            <chartAxisRange>Auto</chartAxisRange>
+            <componentType>Column</componentType>
             <displayUnits>Auto</displayUnits>
-            <drillEnabled>false</drillEnabled>
-            <drillToDetailEnabled>false</drillToDetailEnabled>
-            <enableHover>false</enableHover>
+            <drillEnabled>true</drillEnabled>
+            <drillToDetailEnabled>true</drillToDetailEnabled>
+            <enableHover>true</enableHover>
             <header>Proposals Awaiting Response</header>
-            <indicatorBreakpoint1>0.0</indicatorBreakpoint1>
-            <indicatorBreakpoint2>0.0</indicatorBreakpoint2>
-            <indicatorHighColor>#54C254</indicatorHighColor>
-            <indicatorLowColor>#C25454</indicatorLowColor>
-            <indicatorMiddleColor>#C2C254</indicatorMiddleColor>
+            <legendPosition>Bottom</legendPosition>
             <report>Fidelity_Sales_Reports/Proposals_Sent</report>
-            <showPicturesOnTables>false</showPicturesOnTables>
+            <showPercentage>false</showPercentage>
+            <showValues>true</showValues>
+            <sortBy>RowLabelAscending</sortBy>
             <title>Proposals Awaiting Response</title>
-            <useReportChart>false</useReportChart>
+            <useReportChart>true</useReportChart>
         </components>
     </middleSection>
     <rightSection>
@@ -140,8 +182,24 @@
             <chartAxisRange>Auto</chartAxisRange>
             <componentType>Column</componentType>
             <displayUnits>Auto</displayUnits>
-            <drillEnabled>false</drillEnabled>
-            <drillToDetailEnabled>false</drillToDetailEnabled>
+            <drillEnabled>true</drillEnabled>
+            <drillToDetailEnabled>true</drillToDetailEnabled>
+            <enableHover>true</enableHover>
+            <header>Discovery Meetings</header>
+            <legendPosition>Bottom</legendPosition>
+            <report>Fidelity_Sales_Reports/Discovery_Meetings</report>
+            <showPercentage>false</showPercentage>
+            <showValues>true</showValues>
+            <sortBy>RowLabelAscending</sortBy>
+            <title>Discovery Meetings</title>
+            <useReportChart>true</useReportChart>
+        </components>
+        <components>
+            <chartAxisRange>Auto</chartAxisRange>
+            <componentType>Column</componentType>
+            <displayUnits>Auto</displayUnits>
+            <drillEnabled>true</drillEnabled>
+            <drillToDetailEnabled>true</drillToDetailEnabled>
             <enableHover>true</enableHover>
             <header>Activities by Type</header>
             <legendPosition>Bottom</legendPosition>
@@ -156,8 +214,8 @@
             <chartAxisRange>Auto</chartAxisRange>
             <componentType>Bar</componentType>
             <displayUnits>Auto</displayUnits>
-            <drillEnabled>false</drillEnabled>
-            <drillToDetailEnabled>false</drillToDetailEnabled>
+            <drillEnabled>true</drillEnabled>
+            <drillToDetailEnabled>true</drillToDetailEnabled>
             <enableHover>true</enableHover>
             <header>Calls by Outcome</header>
             <legendPosition>Bottom</legendPosition>
@@ -170,10 +228,26 @@
         </components>
         <components>
             <chartAxisRange>Auto</chartAxisRange>
+            <componentType>Donut</componentType>
+            <displayUnits>Auto</displayUnits>
+            <drillEnabled>true</drillEnabled>
+            <drillToDetailEnabled>true</drillToDetailEnabled>
+            <enableHover>true</enableHover>
+            <header>Calls by Type</header>
+            <legendPosition>Bottom</legendPosition>
+            <report>Fidelity_Sales_Reports/Calls_by_Type</report>
+            <showPercentage>false</showPercentage>
+            <showValues>true</showValues>
+            <sortBy>RowLabelAscending</sortBy>
+            <title>Calls by Type</title>
+            <useReportChart>true</useReportChart>
+        </components>
+        <components>
+            <chartAxisRange>Auto</chartAxisRange>
             <componentType>Bar</componentType>
             <displayUnits>Auto</displayUnits>
-            <drillEnabled>false</drillEnabled>
-            <drillToDetailEnabled>false</drillToDetailEnabled>
+            <drillEnabled>true</drillEnabled>
+            <drillToDetailEnabled>true</drillToDetailEnabled>
             <enableHover>true</enableHover>
             <header>Loss Reasons</header>
             <legendPosition>Bottom</legendPosition>

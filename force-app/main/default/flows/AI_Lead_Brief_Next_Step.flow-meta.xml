@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <environments>Default</environments>
+    <assignments>
+        <name>Add_Call_Line</name>
+        <label>Add Call Line</label>
+        <locationX>50</locationX>
+        <locationY>450</locationY>
+        <assignmentItems>
+            <assignToReference>CallHistory</assignToReference>
+            <operator>Add</operator>
+            <value><elementReference>CallLine</elementReference></value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>CallCount</assignToReference>
+            <operator>Add</operator>
+            <value><numberValue>1.0</numberValue></value>
+        </assignmentItems>
+        <connector><targetReference>Loop_Calls</targetReference></connector>
+    </assignments>
+    <decisions>
+        <name>Under_Limit</name>
+        <label>Under Five Calls?</label>
+        <locationX>50</locationX>
+        <locationY>400</locationY>
+        <defaultConnector><targetReference>Loop_Calls</targetReference></defaultConnector>
+        <defaultConnectorLabel>Enough calls</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Under</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>CallCount</leftValueReference>
+                <operator>LessThan</operator>
+                <rightValue><numberValue>5.0</numberValue></rightValue>
+            </conditions>
+            <connector><targetReference>Add_Call_Line</targetReference></connector>
+            <label>Under five</label>
+        </rules>
+    </decisions>
+    <formulas>
+        <name>CallLine</name>
+        <dataType>String</dataType>
+        <expression>"- " &amp; TEXT({!Loop_Calls.Call_Date_Time__c}) &amp; " | " &amp; TEXT({!Loop_Calls.Call_Type__c}) &amp; " | outcome: " &amp; TEXT({!Loop_Calls.Call_Outcome__c}) &amp; " | notes: " &amp; IF(ISBLANK({!Loop_Calls.Call_Notes__c}), "none", {!Loop_Calls.Call_Notes__c}) &amp; BR()</expression>
+    </formulas>
+    <formulas>
+        <name>CallHistoryFinal</name>
+        <dataType>String</dataType>
+        <expression>IF(ISBLANK({!CallHistory}), "None recorded.", {!CallHistory})</expression>
+    </formulas>
+    <formulas>
+        <name>BriefHtml</name>
+        <dataType>String</dataType>
+        <expression>SUBSTITUTE({!Generate_Brief.promptResponse}, BR(), &quot;&lt;br&gt;&quot;)</expression>
+    </formulas>
+    <formulas>
+        <name>NextHtml</name>
+        <dataType>String</dataType>
+        <expression>SUBSTITUTE({!Generate_Next_Step.promptResponse}, BR(), &quot;&lt;br&gt;&quot;)</expression>
+    </formulas>
+    <interviewLabel>AI Lead Brief and Next Step {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>AI Lead Brief and Next Step</label>
+    <loops>
+        <name>Loop_Calls</name>
+        <label>Loop Calls</label>
+        <locationX>50</locationX>
+        <locationY>300</locationY>
+        <collectionReference>Get_Recent_Calls</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector><targetReference>Under_Limit</targetReference></nextValueConnector>
+        <noMoreValuesConnector><targetReference>Generate_Brief</targetReference></noMoreValuesConnector>
+    </loops>
+    <processType>Flow</processType>
+    <recordLookups>
+        <name>Get_Lead</name>
+        <label>Get Lead</label>
+        <locationX>50</locationX>
+        <locationY>150</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector><targetReference>Get_Recent_Calls</targetReference></connector>
+        <faultConnector><targetReference>Error_Screen</targetReference></faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value><elementReference>recordId</elementReference></value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Lead</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Recent_Calls</name>
+        <label>Get Recent Calls</label>
+        <locationX>50</locationX>
+        <locationY>220</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector><targetReference>Loop_Calls</targetReference></connector>
+        <faultConnector><targetReference>Error_Screen</targetReference></faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Lead__c</field>
+            <operator>EqualTo</operator>
+            <value><elementReference>recordId</elementReference></value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>Call_Log__c</object>
+        <sortField>CreatedDate</sortField>
+        <sortOrder>Desc</sortOrder>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <actionCalls>
+        <name>Generate_Brief</name>
+        <label>Generate Brief</label>
+        <locationX>50</locationX>
+        <locationY>550</locationY>
+        <actionName>Fidelity_Lead_Brief</actionName>
+        <actionType>generatePromptResponse</actionType>
+        <connector><targetReference>Generate_Next_Step</targetReference></connector>
+        <faultConnector><targetReference>Error_Screen</targetReference></faultConnector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>Input:Lead</name>
+            <value><elementReference>Get_Lead</elementReference></value>
+        </inputParameters>
+        <inputParameters>
+            <name>Input:CallHistory</name>
+            <value><elementReference>CallHistoryFinal</elementReference></value>
+        </inputParameters>
+        <nameSegment>Fidelity_Lead_Brief</nameSegment>
+        <offset>0</offset>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <actionCalls>
+        <name>Generate_Next_Step</name>
+        <label>Generate Next Step</label>
+        <locationX>50</locationX>
+        <locationY>650</locationY>
+        <actionName>Fidelity_Lead_Next_Step</actionName>
+        <actionType>generatePromptResponse</actionType>
+        <connector><targetReference>Show_Result</targetReference></connector>
+        <faultConnector><targetReference>Error_Screen</targetReference></faultConnector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>Input:Lead</name>
+            <value><elementReference>Get_Lead</elementReference></value>
+        </inputParameters>
+        <inputParameters>
+            <name>Input:CallHistory</name>
+            <value><elementReference>CallHistoryFinal</elementReference></value>
+        </inputParameters>
+        <nameSegment>Fidelity_Lead_Next_Step</nameSegment>
+        <offset>0</offset>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <screens>
+        <name>Show_Result</name>
+        <label>AI brief and next step</label>
+        <locationX>50</locationX>
+        <locationY>750</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>Note</name>
+            <fieldText>AI suggestion. Please read it and use your own judgement. The AI never calls, sends or changes anything by itself.</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>Brief</name>
+            <fieldText>&lt;p&gt;&lt;b&gt;Prospect brief&lt;/b&gt;&lt;/p&gt;&lt;p&gt;{!BriefHtml}&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>NextStep</name>
+            <fieldText>&lt;p&gt;&lt;b&gt;Suggested next step&lt;/b&gt;&lt;/p&gt;&lt;p&gt;{!NextHtml}&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>Error_Screen</name>
+        <label>Something went wrong</label>
+        <locationX>50</locationX>
+        <locationY>900</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>ErrMsg</name>
+            <fieldText>The AI assistant could not complete this request. Nothing has been changed. Please try again in a moment, or continue without AI.
+
+Details: {!$Flow.FaultMessage}</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector><targetReference>Get_Lead</targetReference></connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>CallHistory</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>CallCount</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+        <value><numberValue>0.0</numberValue></value>
+    </variables>
+    <variables>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

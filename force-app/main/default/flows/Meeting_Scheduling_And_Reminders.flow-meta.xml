@@ -25,7 +25,7 @@
     <formulas>
         <name>Meeting_End_DateTime</name>
         <dataType>DateTime</dataType>
-        <expression>{!$Record.Meeting_Date_Time__c} + (30 / 1440)</expression>
+        <expression>{!$Record.Meeting_Date_Time__c} + (IF(ISBLANK({!$Record.Meeting_Duration_Minutes__c}), 30, {!$Record.Meeting_Duration_Minutes__c}) / 1440)</expression>
     </formulas>
     <interviewLabel>Meeting Scheduling And Reminders {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Meeting Scheduling And Reminders</label>
@@ -151,7 +151,7 @@
         <connector>
             <targetReference>Get_Previous_Future_Meetings</targetReference>
         </connector>
-        <filterFormula>AND(NOT(ISBLANK({!$Record.Meeting_Date_Time__c})), OR(ISNEW(), ISCHANGED({!$Record.Meeting_Date_Time__c})))</filterFormula>
+        <filterFormula>AND(NOT(ISBLANK({!$Record.Meeting_Date_Time__c})), OR(ISNEW(), ISCHANGED({!$Record.Meeting_Date_Time__c}), ISCHANGED({!$Record.Meeting_Duration_Minutes__c})))</filterFormula>
         <filterLogic>formula_evaluates_to_true</filterLogic>
         <object>Lead</object>
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
